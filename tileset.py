@@ -9,8 +9,7 @@ class TileSet:
         self.margin = margin
         self.spacing = spacing
 
-        self.image = pygame.image.load(file)#.convert_alpha()
-        self.image.set_colorkey((0, 0, 0))
+        self.image = pygame.image.load(file)
         self.original_tiles = []
         self.tiles = []
 
