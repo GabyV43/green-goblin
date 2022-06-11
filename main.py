@@ -1,13 +1,15 @@
 import pygame
 from pygame.locals import *
+from levelloader import LevelLoader
 from player import Player
 from tileset import TileSet
 from tilemap import TileMap
+from box import Box
 
 class Game:
     def __init__(self, size, renderables, updatables):
         pygame.init()
-        self.screen = pygame.display.set_mode(size, RESIZABLE)
+        self.screen = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
         self.renderables = renderables
         self.updatables = updatables
         self.running = True
@@ -42,7 +44,14 @@ tileset = TileSet('tileset/TilesetV_2.png', (32, 32), 0, 0, 1)
 tilemap1 = TileMap('maps/level1_Tile Layer 1.csv', tileset)
 tilemap2 = TileMap('maps/level1_Cristais.csv', tileset)
 
-player = Player(tileset, 178, 5, 2, tilemap1.data != -1, 509, 8, 2)
+collision = tilemap1.data != -1
+moveables = []
+
+weight = Box(8, 2, tileset, 509, moveables, collision)
+player = Player(tileset, 178, 5, 2, moveables, collision, weight)
+
+moveables.append(weight)
+moveables.append(player)
 
 def resize_tileset(width, height):
     th, tw = tilemap1.data.shape
@@ -61,5 +70,5 @@ WIDTH = 800
 HEIGHT = 800
 resize_tileset(WIDTH, HEIGHT)
 
-game = Game((WIDTH, HEIGHT), [tilemap1, tilemap2, player], [player])
+game = Game((WIDTH, HEIGHT), [tilemap1, tilemap2, *moveables], [player])
 game.run()

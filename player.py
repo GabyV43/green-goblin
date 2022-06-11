@@ -1,33 +1,32 @@
 from pygame.locals import *
+from box import Box
 
 
-class Player:
-    def __init__(self, tileset, index, x, y, collision, index_ball, x_ball, y_ball):
-        self.tileset = tileset
-        self.index = index
-        self.x = x
-        self.y = y
-        self.collision = collision
-        self.index_ball = index_ball
-        self.x_ball = x_ball
-        self.y_ball = y_ball
-
-    def render(self, surface):
-        scale = self.tileset.scale
-        tw, th = self.tileset.size
-
-        img = self.tileset.tiles[self.index]
-        surface.blit(img, (self.x * tw * scale, self.y * th * scale))
-
-        img_ball = self.tileset.tiles[self.index_ball]
-        surface.blit(img_ball, (self.x_ball * tw * scale, self.y_ball * th * scale))
+class Player(Box):
+    def __init__(self, tileset, index, x, y, moveables, collision, ball):
+        super().__init__(x, y, tileset, index, moveables, collision)
+        self.ball = ball
 
     def move(self, dx, dy):
-        new_x = self.x + dx
-        new_y = self.y + dy
-        if not self.collision[new_y, new_x]:
-            self.x = new_x
-            self.y = new_y
+        if not self.can_move_to(dx, dy):
+            return
+
+        dist_x = abs(self.x + dx - self.ball.x)
+        dist_y = abs(self.y + dy - self.ball.y)
+
+        is_pulling_ball = dist_x + dist_y > 3
+
+        is_right_dir = self.x + dx == self.ball.x or self.y + dy == self.ball.y
+
+        if is_pulling_ball and not is_right_dir:
+            return
+
+        if is_pulling_ball and not self.ball.can_move_to(dx, dy):
+            return
+
+        self.push(dx, dy)
+        if is_pulling_ball:
+            self.ball.push(dx, dy)
 
     def update(self, event):
         if event.type == KEYDOWN:
