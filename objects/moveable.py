@@ -1,6 +1,6 @@
 
 
-class Box:
+class Moveable:
     def __init__(self, x, y, tileset, index, moveables, collision):
         self.x = x
         self.y = y
@@ -8,6 +8,8 @@ class Box:
         self.index = index
         self.moveables = moveables
         self.collision = collision
+        self.dead = False
+        self.disappeared = False
 
     def move(self, dx, dy):
         if self.can_move_to(dx, dy):
@@ -40,9 +42,19 @@ class Box:
 
         return True
 
-    def render(self, surface):
+    def render(self, surface, index = -1):
+        if self.disappeared:
+            return
+        if index == - 1:
+            index = self.index
         scale = self.tileset.scale
         tw, th = self.tileset.size
 
-        img = self.tileset.tiles[self.index]
+        img = self.tileset.tiles[index]
         surface.blit(img, (self.x * tw * scale, self.y * th * scale))
+
+    def die(self):
+        self.dead = True
+
+    def disappear(self):
+        self.disappeared = True

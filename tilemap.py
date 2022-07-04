@@ -3,15 +3,9 @@ import numpy as np
 
 
 class TileMap:
-    def __init__(self, filename, tileset):
-        self.filename = filename
+    def __init__(self, tileset, matrix):
         self.tileset = tileset
-
-        self.load()
-
-    def load(self):
-        file = open(self.filename)
-        self.data = np.array(list(csv.reader(file)), dtype=int)
+        self.data = matrix
 
     def render(self, surface):
         scale = self.tileset.scale
