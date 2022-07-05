@@ -1,6 +1,7 @@
 from enum import Enum
 
 class Event(Enum):
+    LEVEL_UNEND = -1
     LEVEL_END = 0
     PLAYER_DIE = 1
     WEIGHT_DIE = 2

@@ -12,6 +12,11 @@ class WeightEnd(Interactable):
             self.inter = True
             return Event.LEVEL_END
 
+    def uninteract(self, obj):
+        if type(obj) is Weight:
+            self.inter = False
+            return Event.LEVEL_UNEND
+
     def render(self, surface):
         if self.inter:
             super().render(surface, 467)

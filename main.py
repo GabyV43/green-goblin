@@ -44,6 +44,8 @@ level_list = [
     "maps/level2.tmx",
     "maps/level2.5.tmx",
     "maps/level3.tmx",
+    "maps/level4.tmx",
+    "maps/level5.tmx",
 ]
 loader = Loader(level_list, (WIDTH, HEIGHT))
 

@@ -1,3 +1,5 @@
+from interactables.player_end import PlayerEnd
+from interactables.weight_end import WeightEnd
 import pygame
 from pygame import Surface
 from pygame.locals import *
@@ -9,8 +11,6 @@ from pygame import mixer
 
 class Level:
     def __init__(self, tileset: TileSet, player, moveables, interactables, decorations, collision, loader):
-        print(interactables)
-
         self.tileset = tileset
         self.player = player
         self.moveables = moveables
@@ -21,6 +21,9 @@ class Level:
         self.resized_bg = self.background
         self.loader = loader
         self.complete = None
+        self.n_ends = len(list(filter(lambda t: t is PlayerEnd or t is WeightEnd, (type(interactables[pos]) for pos in interactables))))
+        self.current_ends = 0
+        print("n_ends: ", self.n_ends)
 
     def render(self, surface: Surface):
         w = int(surface.get_width() // self.tileset.scale // 4)
@@ -66,16 +69,27 @@ class Level:
         if not updated:
             return
 
+        print(self.current_ends)
+
         for mov in self.moveables:
             pos = (mov.x, mov.y)
             if pos in self.interactables:
                 event = self.interactables[pos].interact(mov)
                 if event is not None:
                     self.handle_event(event)
+            old_pos = (mov.old_x, mov.old_y)
+            if old_pos in self.interactables:
+                event = self.interactables[old_pos].uninteract(mov)
+                if event is not None:
+                    self.handle_event(event)
 
     def handle_event(self, event):
-        if event == Event.LEVEL_END:
-            self.complete = time.time()
+        print(event)
+        if event == Event.LEVEL_UNEND:
+            self.current_ends -= 1
+        elif event == Event.LEVEL_END:
+            self.current_ends += 1
+            self.check_win()
         elif event == Event.PLAYER_DIE:
             self.player.die()
         elif event == Event.WEIGHT_DIE:
@@ -90,7 +104,6 @@ class Level:
         elif event == Event.FREEZE:
             self.player.freeze()
         elif event == Event.UNFREEZE:
-            print("Unfreeze")
             self.player.unfreeze()
 
 
@@ -107,3 +120,7 @@ class Level:
 
         self.tileset.resize(scale)
         self.resized_bg = pygame.transform.scale(self.background, (128 * scale, 128 * scale))
+
+    def check_win(self):
+        if self.n_ends == self.current_ends:
+            self.complete = time.time()

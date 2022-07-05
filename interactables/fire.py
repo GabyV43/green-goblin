@@ -8,7 +8,5 @@ class Fire(Interactable):
         super().__init__(x, y, tileset, 408)
 
     def interact(self, obj):
-        print("Fire interact")
         if (type(obj) is Weight) or (type(obj) is Player):
-            print("Fire return event")
             return Event.UNFREEZE
