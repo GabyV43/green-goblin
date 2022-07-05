@@ -39,6 +39,9 @@ HEIGHT = 640
 level_list = [
     "maps/tutorial1.tmx",
     "maps/tutorial2.tmx",
+    "maps/tutorial6.tmx",
+    "maps/tutorial4.tmx",
+    "maps/tutorial5.tmx",
     "maps/tutorial3.tmx",
     "maps/level1.tmx",
     "maps/level2.tmx",
