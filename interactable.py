@@ -11,6 +11,9 @@ class Interactable(ABC):
     def interact(self, obj):
         pass
 
+    def uninteract(self, obj):
+        pass
+
     def render(self, surface, index = -1):
         if index == -1:
             index = self.index

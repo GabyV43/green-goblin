@@ -4,6 +4,8 @@ class Moveable:
     def __init__(self, x, y, tileset, index, moveables, collision):
         self.x = x
         self.y = y
+        self.old_x = x
+        self.old_y = y
         self.tileset = tileset
         self.index = index
         self.moveables = moveables
@@ -16,6 +18,8 @@ class Moveable:
             self.push(dx, dy)
 
     def push(self, dx, dy):
+        self.old_x = self.x
+        self.old_y = self.y
         self.x += dx
         self.y += dy
 
