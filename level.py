@@ -21,9 +21,7 @@ class Level:
         self.resized_bg = self.background
         self.loader = loader
         self.complete = None
-        self.n_ends = len(list(filter(lambda t: t is PlayerEnd or t is WeightEnd, (type(interactables[pos]) for pos in interactables))))
-        self.current_ends = 0
-        print("n_ends: ", self.n_ends)
+        self.ends = list(filter(lambda t: type(t) is PlayerEnd or type(t) is WeightEnd, (interactables[pos] for pos in interactables)))
 
     def render(self, surface: Surface):
         w = int(surface.get_width() // self.tileset.scale // 4)
@@ -69,8 +67,6 @@ class Level:
         if not updated:
             return
 
-        print(self.current_ends)
-
         for mov in self.moveables:
             pos = (mov.x, mov.y)
             if pos in self.interactables:
@@ -86,9 +82,8 @@ class Level:
     def handle_event(self, event):
         print(event)
         if event == Event.LEVEL_UNEND:
-            self.current_ends -= 1
+            pass
         elif event == Event.LEVEL_END:
-            self.current_ends += 1
             self.check_win()
         elif event == Event.PLAYER_DIE:
             self.player.die()
@@ -122,5 +117,5 @@ class Level:
         self.resized_bg = pygame.transform.scale(self.background, (128 * scale, 128 * scale))
 
     def check_win(self):
-        if self.n_ends == self.current_ends:
+        if all(map(lambda e: e.active, self.ends)):
             self.complete = time.time()
