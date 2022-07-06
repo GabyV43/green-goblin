@@ -22,6 +22,7 @@ class Level:
         self.loader = loader
         self.complete = None
         self.ends = list(filter(lambda t: type(t) is PlayerEnd or type(t) is WeightEnd, (interactables[pos] for pos in interactables)))
+        self.button_pressed = False
 
     def render(self, surface: Surface):
         w = int(surface.get_width() // self.tileset.scale // 4)
@@ -67,17 +68,33 @@ class Level:
         if not updated:
             return
 
+        all_events = []
+
         for mov in self.moveables:
             pos = (mov.x, mov.y)
             if pos in self.interactables:
                 event = self.interactables[pos].interact(mov)
                 if event is not None:
-                    self.handle_event(event)
+                    all_events.append(event)
             old_pos = (mov.old_x, mov.old_y)
             if old_pos in self.interactables:
                 event = self.interactables[old_pos].uninteract(mov)
                 if event is not None:
-                    self.handle_event(event)
+                    all_events.append(event)
+
+        self.handle_all_events(all_events)
+        
+    def handle_all_events(self, all_events: list[Event]):
+        all_events.sort(key=lambda e: e.value)
+        if Event.BUTTON_PRESS in all_events:
+            all_events[:] = filter(lambda x: x != Event.BUTTON_UNPRESS, all_events)
+        if Event.UNFREEZE in all_events:
+            all_events[:] = filter(lambda x: x != Event.FREEZE, all_events)
+
+        for event in all_events:
+            self.handle_event(event)
+        
+
 
     def handle_event(self, event):
         print(event)
@@ -90,10 +107,14 @@ class Level:
         elif event == Event.WEIGHT_DIE:
             self.player.weight_die()
         elif event == Event.BUTTON_PRESS:
-            for pos in self.interactables:
-                inter = self.interactables[pos]
-                if type(inter) is Slime:
-                    inter.toggle()
+            if not self.button_pressed:
+                for pos in self.interactables:
+                    inter = self.interactables[pos]
+                    if type(inter) is Slime:
+                        inter.toggle()
+            self.button_pressed = True
+        elif event == Event.BUTTON_UNPRESS:
+            self.button_pressed = False
         elif event == Event.PLAYER_LOCK:
             self.player.lock()
         elif event == Event.FREEZE:

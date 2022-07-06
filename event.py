@@ -6,7 +6,8 @@ class Event(Enum):
     PLAYER_DIE = 1
     WEIGHT_DIE = 2
     BUTTON_PRESS = 3
-    PLAYER_LOCK = 4
-    WEIGHT_LOCK = 5
-    FREEZE = 6
-    UNFREEZE = 7
+    BUTTON_UNPRESS = 4
+    PLAYER_LOCK = 5
+    WEIGHT_LOCK = 6
+    FREEZE = 7
+    UNFREEZE = 8

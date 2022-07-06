@@ -13,3 +13,7 @@ class Button(Interactable):
             button_sound.set_volume(0.5)
             button_sound.play()
             return Event.BUTTON_PRESS
+
+    def uninteract(self, obj):
+        if type(obj) is Weight or type(obj) is Player:
+            return Event.BUTTON_UNPRESS
