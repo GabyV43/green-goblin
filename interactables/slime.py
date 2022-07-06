@@ -5,9 +5,9 @@ from event import Event
 from pygame import mixer
 
 class Slime(Interactable):
-    def __init__(self, x, y, tileset, index):
+    def __init__(self, x, y, tileset, index, active = True):
         super().__init__(x, y, tileset, index)
-        self.active = True
+        self.active = active
 
     def interact(self, obj):
         if not self.active:

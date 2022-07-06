@@ -23,7 +23,7 @@ class Game:
                     self.running = False
                 elif event.type == WINDOWRESIZED or event.type == WINDOWSIZECHANGED:
                     width, height = pygame.display.get_surface().get_size()
-                    self.loader.level.resize_tileset(width, height)
+                    self.loader.resize_tileset(width, height)
                 else:
                     self.loader.level.update(event)
 

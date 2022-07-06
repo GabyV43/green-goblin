@@ -2,6 +2,7 @@ import xml.etree.ElementTree as ET
 from io import StringIO
 import numpy as np
 import csv
+from interactables.box_end import BoxEnd
 from interactables.button import Button
 from interactables.fire import Fire
 from interactables.ice import Ice
@@ -30,7 +31,9 @@ ICE_ID = 378
 FIRE_ID = 408
 WEIGHT_END_ID = 523
 PLAYER_END_ID = 581
+BOX_END_ID = 553
 SLIME_IDS = [527, 556, 585, 470, 471, 472, 529, 558, 587, 562, 563, 564]
+SLIME_IN_IDS = [266, 267, 268, 323, 352, 381, 325, 354, 383, 358, 359, 360]
 
 class Loader():
     def __init__(self, level_list, screen_size):
@@ -111,8 +114,12 @@ class Loader():
                     inter = WeightEnd(ix, iy, self.tileset)
                 elif id == PLAYER_END_ID:
                     inter = PlayerEnd(ix, iy, self.tileset)
+                elif id == BOX_END_ID:
+                    inter = BoxEnd(ix, iy, self.tileset)
                 elif id in SLIME_IDS:
-                    inter = Slime(ix, iy, self.tileset, id)
+                    inter = Slime(ix, iy, self.tileset, id, True)
+                elif id in SLIME_IN_IDS:
+                    inter = Slime(ix, iy, self.tileset, id + 204, False)
                 elif id == -1:
                     pass # In this case there is nothing there
                 else:
@@ -180,3 +187,8 @@ class Loader():
     def load_prev_level(self):
         self.current_level -= 1
         self.reload()
+
+    def resize_tileset(self, width, height):
+        self.screen_size = [width, height]
+        self.level.resize_tileset(width, height)
+
