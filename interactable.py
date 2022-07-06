@@ -23,3 +23,12 @@ class Interactable(ABC):
         img = self.tileset.tiles[index]
         surface.blit(img, (self.x * tw * scale, self.y * th * scale))
 
+    def get_state(self):
+        return (
+            self.x,
+            self.y,
+        )
+
+    def load_state(self, state):
+        self.x = state[0]
+        self.y = state[1]

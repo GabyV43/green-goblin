@@ -23,6 +23,7 @@ class Level:
         self.complete = None
         self.ends = list(filter(lambda t: type(t) is PlayerEnd or type(t) is WeightEnd, (interactables[pos] for pos in interactables)))
         self.button_pressed = False
+        self.history = []
 
     def render(self, surface: Surface):
         w = int(surface.get_width() // self.tileset.scale // 4)
@@ -55,6 +56,12 @@ class Level:
     def update(self, event):
         if self.complete is not None:
             return
+        
+        general_state = (
+            self.get_state(),
+            [m.get_state() for m in self.moveables],
+            [i.get_state() for i in self.interactables.values()]
+        )
 
         updated = self.player.update(event)
         if event.type == KEYDOWN:
@@ -64,9 +71,14 @@ class Level:
                 self.loader.load_next_level()
             elif event.key == K_p:
                 self.loader.load_prev_level()
+            elif event.key == K_z:
+                print("UNDO")
+                self.undo()
 
         if not updated:
             return
+
+        self.history.append(general_state)
 
         all_events = []
 
@@ -140,3 +152,24 @@ class Level:
     def check_win(self):
         if all(map(lambda e: e.active, self.ends)):
             self.complete = time.time()
+
+    def get_state(self):
+        return (
+            self.button_pressed,
+        )
+
+    def load_state(self, state):
+        self.button_pressed = state[0]
+
+    def undo(self):
+        if len(self.history) == 0:
+            return
+
+        general_state = self.history.pop()
+        self.load_state(general_state[0])
+        
+        for m, s in zip(self.moveables, general_state[1]):
+            m.load_state(s)
+
+        for i, s in zip(self.interactables.values(), general_state[2]):
+            i.load_state(s)

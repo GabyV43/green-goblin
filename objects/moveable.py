@@ -62,3 +62,21 @@ class Moveable:
 
     def disappear(self):
         self.disappeared = True
+
+    def get_state(self):
+        return (
+            self.x,
+            self.y,
+            self.old_x,
+            self.old_y,
+            self.dead,
+            self.disappeared
+        )
+
+    def load_state(self, state):
+        self.x = state[0]
+        self.y = state[1]
+        self.old_x = state[2]
+        self.old_y = state[3]
+        self.dead = state[4]
+        self.disappeared = state[5]
