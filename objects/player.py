@@ -7,11 +7,7 @@ class Player(Moveable):
         super().__init__(x, y, tileset, 30, moveables, collision)
         self.weight = weight
         self.dead = False
-        self.locked = False
         self.frozen = False
-
-    def can_move_to(self, dx, dy):
-        return super().can_move_to(dx, dy) and not self.locked
 
     def move(self, dx, dy):
         if self.frozen:
@@ -21,7 +17,11 @@ class Player(Moveable):
             if not self.weight.can_move_to(dx, dy):
                 return False
 
-            if self.x + dx == self.weight.x and self.y + dy == self.weight.y: # se eu estou andando pra cima da bola
+            # weightB4 = self.x + dx == self.weight.x and self.y + dy == self.weight.y # se eu estou andando pra cima da bola
+            weightB4 = dx > 0 and self.weight.x > self.x or dx < 0 and self.weight.x < self.x # se eu ando na direção da bola
+            weightB4 |= dy > 0 and self.weight.y > self.y or dy < 0 and self.weight.y < self.y 
+
+            if weightB4:
                 self.weight.move(dx, dy) # anda ela antes, assim eu não empurro ela
                 super().move(dx, dy)
             else:
@@ -48,9 +48,9 @@ class Player(Moveable):
             if is_pulling_weight:
                 self.weight.push(dx, dy)
 
-            feet_sound = mixer.Sound("sounds_effects/walking.mp3")
-            feet_sound.set_volume(0.2)
-            feet_sound.play()
+        feet_sound = mixer.Sound("sounds_effects/walking.mp3")
+        feet_sound.set_volume(0.2)
+        feet_sound.play()
 
         return True
 
@@ -71,6 +71,8 @@ class Player(Moveable):
     def render(self, surface):
         if self.dead:
             super().render(surface, 59)
+        elif self.frozen:
+            super().render(surface, 60)
         else:
             super().render(surface)
 
@@ -85,14 +87,13 @@ class Player(Moveable):
         self.disappear()
         self.weight.disappear()
 
-    def lock(self):
-        self.locked = True
-
     def freeze(self):
         self.frozen = True
+        self.weight.freeze()
 
     def unfreeze(self):
         self.frozen = False
+        self.weight.unfreeze()
 
     def get_state(self):
         return (

@@ -72,7 +72,6 @@ class Level:
             elif event.key == K_p:
                 self.loader.load_prev_level()
             elif event.key == K_z:
-                print("UNDO")
                 self.undo()
 
         if not updated:
@@ -109,7 +108,6 @@ class Level:
 
 
     def handle_event(self, event):
-        print(event)
         if event == Event.LEVEL_UNEND:
             pass
         elif event == Event.LEVEL_END:
@@ -125,10 +123,13 @@ class Level:
                     if type(inter) is Slime:
                         inter.toggle()
             self.button_pressed = True
+            for mov in self.moveables:
+                pos = (mov.x, mov.y)
+                if pos in self.interactables:
+                    if type(self.interactables[pos]) is Slime:
+                        self.interactables[pos].interact(mov)
         elif event == Event.BUTTON_UNPRESS:
             self.button_pressed = False
-        elif event == Event.PLAYER_LOCK:
-            self.player.lock()
         elif event == Event.FREEZE:
             self.player.freeze()
         elif event == Event.UNFREEZE:

@@ -23,3 +23,15 @@ class WeightEnd(Interactable):
         else:
             super().render(surface)
 
+    def get_state(self):
+        return (
+            self.x,
+            self.y,
+            self.active,
+        )
+
+    def load_state(self, state):
+        self.x = state[0]
+        self.y = state[1]
+        self.active = state[2]
+

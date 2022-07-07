@@ -1,4 +1,5 @@
 from interactable import Interactable
+from objects.moveable import Moveable
 from objects.weight import Weight
 from objects.player import Player
 from event import Event
@@ -11,17 +12,14 @@ class Slime(Interactable):
 
     def interact(self, obj):
         if not self.active:
+            obj.unlock()
             return
-        if type(obj) is Weight:
+        if issubclass(type(obj), Moveable):
             slimew_sound = mixer.Sound("sounds_effects/slime.mp3")
             slimew_sound.set_volume(0.2)
             slimew_sound.play()
-            return Event.WEIGHT_LOCK
-        if type(obj) is Player:
-            slimep_sound = mixer.Sound("sounds_effects/slime.mp3")
-            slimep_sound.set_volume(0.5)
-            slimep_sound.play()
-            return Event.PLAYER_LOCK
+
+            obj.lock()
 
     def render(self, surface):
         if not self.active:
@@ -30,4 +28,16 @@ class Slime(Interactable):
 
     def toggle(self):
         self.active = not self.active
+
+    def get_state(self):
+        return (
+            self.x,
+            self.y,
+            self.active,
+        )
+
+    def load_state(self, state):
+        self.x = state[0]
+        self.y = state[1]
+        self.active = state[2]
 

@@ -19,3 +19,15 @@ class Wood(Interactable):
         else:
             super().render(surface, 206)
 
+    def get_state(self):
+        return (
+            self.x,
+            self.y,
+            self.inter,
+        )
+
+    def load_state(self, state):
+        self.x = state[0]
+        self.y = state[1]
+        self.inter = state[2]
+

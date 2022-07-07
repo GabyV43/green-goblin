@@ -11,6 +11,7 @@ class Moveable:
         self.moveables = moveables
         self.collision = collision
         self.dead = False
+        self.locked = False
         self.disappeared = False
 
     def move(self, dx, dy):
@@ -31,6 +32,9 @@ class Moveable:
                 break
 
     def can_move_to(self, dx, dy):
+        if self.locked:
+            return
+        
         new_x = self.x + dx
         new_y = self.y + dy
 
@@ -63,6 +67,12 @@ class Moveable:
     def disappear(self):
         self.disappeared = True
 
+    def lock(self):
+        self.locked = True
+    
+    def unlock(self):
+        self.locked = False
+
     def get_state(self):
         return (
             self.x,
@@ -70,7 +80,8 @@ class Moveable:
             self.old_x,
             self.old_y,
             self.dead,
-            self.disappeared
+            self.disappeared,
+            self.locked,
         )
 
     def load_state(self, state):
@@ -80,3 +91,4 @@ class Moveable:
         self.old_y = state[3]
         self.dead = state[4]
         self.disappeared = state[5]
+        self.locked = state[6]
