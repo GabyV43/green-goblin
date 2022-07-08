@@ -37,8 +37,8 @@ WIDTH = 640
 HEIGHT = 640
 
 """ TODO
-- 2 fases int. gelo
-- 1 fase int. fogo
+- 2 fases int. gelo OK
+- 1 fase int. fogo OK
 - 2 fases madeira
 - 2 fases espinhos
 """
@@ -53,6 +53,9 @@ level_list = [
     "maps/intro2finais.tmx",
     "maps/level1.tmx",
     "maps/level2.tmx",
+    "maps/gelo1.tmx",
+    "maps/gelo2.tmx",
+    "maps/fogo1.tmx",
     "maps/level2.5.tmx",
     "maps/level3.tmx",
     "maps/level4.tmx",
