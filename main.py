@@ -53,12 +53,15 @@ level_list = [
     "maps/intro2finais.tmx",
     "maps/level1.tmx",
     "maps/level2.tmx",
+    # 2 fases de caixa simples
+    "maps/level4.tmx",
     "maps/gelo1.tmx",
     "maps/gelo2.tmx",
     "maps/fogo1.tmx",
     "maps/level2.5.tmx",
-    "maps/level3.tmx",
-    "maps/level4.tmx",
+    # 1~2 fases de slime
+    "maps/level3.tmx", # trocar essa fase pelo amor de deus
+    "maps/wood1.tmx",
     "maps/intromad.tmx",
     "maps/level5.tmx",
     "maps/level6.1.tmx",

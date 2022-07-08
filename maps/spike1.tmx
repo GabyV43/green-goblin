@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="9" height="4" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="1">
+ <tileset firstgid="1" source="../tileset/Tileset_Oficial_V2.tsx"/>
+ <layer id="1" name="Tile Layer 1" width="9" height="4">
+  <data encoding="csv">
+53,370,54,372,55,370,370,370,491,
+111,0,0,0,0,0,0,0,115,
+140,0,0,0,0,0,0,0,281,
+463,172,403,403,405,403,170,170,462
+</data>
+ </layer>
+ <layer id="2" name="obj" width="9" height="4">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,
+0,31,0,0,0,0,0,0,0,
+0,149,209,0,0,0,0,524,0,
+0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>
