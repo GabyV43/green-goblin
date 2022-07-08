@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import SRCALPHA
+from math import ceil
 
 
 class TileSet:
@@ -36,5 +37,5 @@ class TileSet:
         self.scale = scale
         self.tiles = []
         for tile in self.original_tiles:
-            resized = pygame.transform.scale(tile, (self.size[0] * scale, self.size[1] * scale))
+            resized = pygame.transform.scale(tile, (ceil(self.size[0] * scale), ceil(self.size[1] * scale)))
             self.tiles.append(resized)

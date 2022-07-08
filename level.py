@@ -8,6 +8,7 @@ from interactables.slime import Slime
 import time
 from tileset import TileSet
 from pygame import mixer
+from math import ceil
 
 class Level:
     def __init__(self, tileset: TileSet, player, moveables, interactables, decorations, collision, loader):
@@ -56,7 +57,7 @@ class Level:
     def update(self, event):
         if self.complete is not None:
             return
-        
+
         general_state = (
             self.get_state(),
             [m.get_state() for m in self.moveables],
@@ -94,7 +95,7 @@ class Level:
                     all_events.append(event)
 
         self.handle_all_events(all_events)
-        
+
     def handle_all_events(self, all_events: list[Event]):
         all_events.sort(key=lambda e: e.value)
         if Event.BUTTON_PRESS in all_events:
@@ -104,7 +105,7 @@ class Level:
 
         for event in all_events:
             self.handle_event(event)
-        
+
 
 
     def handle_event(self, event):
@@ -151,7 +152,7 @@ class Level:
         scale = min(scale_x, scale_y)
 
         self.tileset.resize(scale)
-        self.resized_bg = pygame.transform.scale(self.background, (128 * scale, 128 * scale))
+        self.resized_bg = pygame.transform.scale(self.background, (ceil(128 * scale), ceil(128 * scale)))
 
     def check_win(self):
         if all(map(lambda e: e.active, self.ends)):
@@ -171,7 +172,7 @@ class Level:
 
         general_state = self.history.pop()
         self.load_state(general_state[0])
-        
+
         for m, s in zip(self.moveables, general_state[1]):
             m.load_state(s)
 
