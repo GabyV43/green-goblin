@@ -118,6 +118,9 @@ class Level:
             self.player.weight_die()
         elif event == Event.BUTTON_PRESS:
             if not self.button_pressed:
+                button_sound = mixer.Sound("sounds_effects/button_press.mp3")
+                button_sound.set_volume(0.5)
+                button_sound.play()
                 for pos in self.interactables:
                     inter = self.interactables[pos]
                     if type(inter) is Slime:
