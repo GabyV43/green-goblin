@@ -36,6 +36,13 @@ class Game:
 WIDTH = 640
 HEIGHT = 640
 
+""" TODO
+- 2 fases int. gelo
+- 1 fase int. fogo
+- 2 fases madeira
+- 2 fases espinhos
+"""
+
 level_list = [
     "maps/tutorial1.tmx",
     "maps/tutorial2.tmx",
@@ -50,6 +57,7 @@ level_list = [
     "maps/level3.tmx",
     "maps/level4.tmx",
     "maps/level5.tmx",
+    "maps/level6.1.tmx",
     "maps/level6.tmx",
     "maps/level10.tmx",
 ]
