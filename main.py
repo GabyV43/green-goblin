@@ -43,6 +43,7 @@ level_list = [
     "maps/tutorial4.tmx",
     "maps/tutorial5.tmx",
     "maps/tutorial3.tmx",
+    "maps/intro2finais.tmx",
     "maps/level1.tmx",
     "maps/level2.tmx",
     "maps/level2.5.tmx",
