@@ -20,6 +20,7 @@ class Level:
         self.collision = collision
         self.background = pygame.image.load('images/tent_fundo1.png')
         self.resized_bg = self.background
+        self.offset = (0, 0)
         self.loader = loader
         self.complete = None
         self.ends = list(filter(lambda t: type(t) is PlayerEnd or type(t) is WeightEnd, (interactables[pos] for pos in interactables)))
@@ -34,18 +35,18 @@ class Level:
             for y in range(h):
                 surface.blit(self.resized_bg, (x * 128 * self.tileset.scale, y * 128 * self.tileset.scale))
 
-        self.collision.render(surface)
+        self.collision.render(surface, self.offset)
 
         for dec in self.decorations:
-            dec.render(surface)
+            dec.render(surface, self.offset)
 
         for pos in self.interactables:
-            self.interactables[pos].render(surface)
+            self.interactables[pos].render(surface, offset = self.offset)
 
         for mov in self.moveables:
-            mov.render(surface)
+            mov.render(surface, offset=self.offset)
 
-        self.player.render(surface)
+        self.player.render(surface, self.offset)
 
         if self.complete is not None:
             win_sound = mixer.Sound("sounds_effects/win.mp3")
@@ -153,6 +154,11 @@ class Level:
 
         self.tileset.resize(scale)
         self.resized_bg = pygame.transform.scale(self.background, (ceil(128 * scale), ceil(128 * scale)))
+
+        if scale_x > scale_y:
+            self.offset = ((width - scale * tw) / 2, 0)
+        else:
+            self.offset = (0, (height - scale * th) / 2)
 
     def check_win(self):
         if all(map(lambda e: e.active, self.ends)):

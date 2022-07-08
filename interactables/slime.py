@@ -21,10 +21,10 @@ class Slime(Interactable):
 
             obj.lock()
 
-    def render(self, surface):
+    def render(self, surface, offset=(0, 0)):
         if not self.active:
             return
-        return super().render(surface)
+        return super().render(surface, offset=offset)
 
     def toggle(self):
         self.active = not self.active

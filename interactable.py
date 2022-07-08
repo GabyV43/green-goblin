@@ -14,14 +14,14 @@ class Interactable(ABC):
     def uninteract(self, obj):
         pass
 
-    def render(self, surface, index = -1):
+    def render(self, surface, index = -1, offset = (0, 0)):
         if index == -1:
             index = self.index
         scale = self.tileset.scale
         tw, th = self.tileset.size
 
         img = self.tileset.tiles[index]
-        surface.blit(img, (self.x * tw * scale, self.y * th * scale))
+        surface.blit(img, (self.x * tw * scale + offset[0], self.y * th * scale + offset[1]))
 
     def get_state(self):
         return (

@@ -33,9 +33,9 @@ class TileSet:
                 self.original_tiles.append(tile)
 
 
-    def resize(self, scale):
+    def resize(self, scale, offset = (0, 0)):
         self.scale = scale
         self.tiles = []
         for tile in self.original_tiles:
-            resized = pygame.transform.scale(tile, (ceil(self.size[0] * scale), ceil(self.size[1] * scale)))
+            resized = pygame.transform.scale(tile, (ceil(self.size[0] * scale + offset[0]), ceil(self.size[1] * scale + offset[1])))
             self.tiles.append(resized)

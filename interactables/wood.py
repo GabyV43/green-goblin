@@ -13,11 +13,11 @@ class Wood(Interactable):
             self.inter = True
             return Event.WEIGHT_DIE
 
-    def render(self, surface):
+    def render(self, surface, offset=(0,0)):
         if not self.inter:
-            super().render(surface)
+            super().render(surface, offset=offset)
         else:
-            super().render(surface, 206)
+            super().render(surface, 206, offset)
 
     def get_state(self):
         return (

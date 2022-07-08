@@ -68,13 +68,13 @@ class Player(Moveable):
             elif k == K_d or k == K_RIGHT:
                 return self.move(1, 0)
 
-    def render(self, surface):
+    def render(self, surface, offset = (0, 0)):
         if self.dead:
-            super().render(surface, 59)
+            super().render(surface, 59, offset)
         elif self.frozen:
-            super().render(surface, 60)
+            super().render(surface, 60, offset)
         else:
-            super().render(surface)
+            super().render(surface, offset=offset)
 
     def die(self):
         die_sound = mixer.Sound("sounds_effects/gameover.mp3")

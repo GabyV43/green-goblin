@@ -7,7 +7,7 @@ class TileMap:
         self.tileset = tileset
         self.data = matrix
 
-    def render(self, surface):
+    def render(self, surface, offset=(0,0)):
         scale = self.tileset.scale
         tw, th = self.tileset.size
 
@@ -17,7 +17,7 @@ class TileMap:
                 tile = self.data[y, x]
                 if tile != -1:
                     img = self.tileset.tiles[tile]
-                    surface.blit(img, (x * tw * scale, y * th * scale))
+                    surface.blit(img, (x * tw * scale + offset[0], y * th * scale + offset[1]))
 
     def resize(self, scale):
         self.tileset.resize(scale)

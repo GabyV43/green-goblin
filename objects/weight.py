@@ -11,11 +11,11 @@ class Weight(Moveable):
     def unfreeze(self):
         self.frozen = False
 
-    def render(self, surface):
+    def render(self, surface, offset = (0, 0)):
         if self.frozen:
-            super().render(surface, 149)
+            super().render(surface, 149, offset)
         else:
-            super().render(surface)
+            super().render(surface, offset=offset)
 
 
     def get_state(self):

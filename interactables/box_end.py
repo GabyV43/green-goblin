@@ -17,11 +17,11 @@ class BoxEnd(Interactable):
             self.active = False
             return Event.LEVEL_UNEND
 
-    def render(self, surface):
+    def render(self, surface, offset=(0,0)):
         if self.active:
-            super().render(surface, 495)
+            super().render(surface, 495, offset)
         else:
-            super().render(surface)
+            super().render(surface, offset=offset)
 
     def get_state(self):
         return (
