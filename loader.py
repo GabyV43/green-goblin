@@ -6,6 +6,7 @@ from interactables.box_end import BoxEnd
 from interactables.button import Button
 from interactables.fire import Fire
 from interactables.heavy_button import HeavyButton
+from interactables.hole import Hole
 from interactables.ice import Ice
 from interactables.player_end import PlayerEnd
 from interactables.slime import Slime
@@ -26,9 +27,10 @@ PLAYER_ID = 30
 BOX_ID = 146
 WEIGHT_ID = 148
 WOOD_ID = 204
+HOLE_ID = 206
 SPIKE_ID = 208
 BUTTON_ID = 262
-HEAVY_BUTTON_ID = 206
+HEAVY_BUTTON_ID = 264
 ICE_ID = 378
 FIRE_ID = 408
 WEIGHT_END_ID = 523
@@ -106,6 +108,8 @@ class Loader():
                     inter = Wood(ix, iy, self.tileset)
                 elif id == SPIKE_ID:
                     inter = Spike(ix, iy, self.tileset)
+                elif id == HOLE_ID:
+                    inter = Hole(ix, iy, self.tileset)
                 elif id == BUTTON_ID:
                     inter = Button(ix, iy, self.tileset)
                 elif id == HEAVY_BUTTON_ID:

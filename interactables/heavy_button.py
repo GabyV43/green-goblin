@@ -6,7 +6,7 @@ from objects.weight import Weight
 
 class HeavyButton(Interactable):
     def __init__(self, x, y, tileset):
-        super().__init__(x, y, tileset, 206)
+        super().__init__(x, y, tileset, 264)
         
     def interact(self, obj):
         if type(obj) is Weight:
