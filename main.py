@@ -53,7 +53,8 @@ level_list = [
     "maps/intro2finais.tmx",
     "maps/level1.tmx",
     "maps/level2.tmx",
-    # 2 fases de caixa simples
+    "maps/intfinalbox.tmx",
+    "maps/introcaixa.tmx",
     "maps/level4.tmx",
     "maps/gelo1.tmx",
     "maps/gelo2.tmx",
@@ -66,7 +67,7 @@ level_list = [
     "maps/level5.tmx",
     "maps/lab2.tmx",
     "maps/level6.1.tmx",
-    "maps/level6.tmx",
+    # "maps/level6.tmx",
     "maps/level6v2.tmx",
     "maps/level10.tmx",
 ]
