@@ -10,6 +10,9 @@ class TileSet:
         self.margin = margin
         self.spacing = spacing
 
+        self.chain_original = pygame.image.load("images/chain.png")
+        self.chain = None
+
         self.image = pygame.image.load(file)
         self.original_tiles = []
         self.tiles = []
@@ -28,14 +31,17 @@ class TileSet:
         for y in range(y0, h, dy):
             for x in range(x0, w, dx):
                 tile = pygame.Surface(self.size, SRCALPHA)
-                tile.blit(self.image, (0,0), (x, y, *self.size))
+                tile.blit(self.image, (0, 0), (x, y, *self.size))
 
                 self.original_tiles.append(tile)
 
-
-    def resize(self, scale, offset = (0, 0)):
+    def resize(self, scale, offset=(0, 0)):
         self.scale = scale
         self.tiles = []
         for tile in self.original_tiles:
-            resized = pygame.transform.scale(tile, (ceil(self.size[0] * scale + offset[0]), ceil(self.size[1] * scale + offset[1])))
+            resized = pygame.transform.scale(tile, (ceil(
+                self.size[0] * scale + offset[0]), ceil(self.size[1] * scale + offset[1])))
             self.tiles.append(resized)
+        chain_size = self.chain_original.get_size()
+        self.chain = pygame.transform.scale(self.chain_original, (ceil(
+            chain_size[0] * scale + offset[0]), ceil(chain_size[1] * scale + offset[1])))

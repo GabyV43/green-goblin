@@ -1,6 +1,8 @@
 from pygame.locals import *
 from objects.moveable import Moveable
 from pygame import mixer
+import pygame
+import math
 
 
 class Player(Moveable):
@@ -82,10 +84,50 @@ class Player(Moveable):
             super().render(surface, offset=offset)
 
     def draw_chain(self, surface, offset):
-        import pygame
-        pygame.draw.line(surface, (255, 255, 255),
-                         ((self.x + 0.5) * self.tileset.size[0] * self.tileset.scale + offset[0], (self.y + 0.5) * self.tileset.size[1] * self.tileset.scale + offset[1]), ((self.weight.x + 0.5) * self.tileset.size[0] * self.tileset.scale + offset[0], (self.weight.y + 0.5) * self.tileset.size[1] * self.tileset.scale + offset[1]))
+        """pygame.draw.line(surface, (255, 255, 255),
+                         (
+            (self.x + 0.5) *
+            self.tileset.size[0] * self.tileset.scale + offset[0],
+            (self.y + 0.5) *
+            self.tileset.size[1] * self.tileset.scale + offset[1]
+        ), (
+            (self.weight.x + 0.5) *
+            self.tileset.size[0] * self.tileset.scale + offset[0],
+            (self.weight.y + 0.5) *
+            self.tileset.size[1] * self.tileset.scale + offset[1]
+        )
+        )"""
+
+        dist_px = math.sqrt(((self.x - self.weight.x) * self.tileset.size[0]) ** 2 + (
+            (self.y - self.weight.y) * self.tileset.size[1]) ** 2)
+
+        chain_width = self.tileset.chain_original.get_width()
+        count = math.ceil(dist_px / chain_width)
+
+        angle = math.atan2(self.weight.y - self.y, self.weight.x - self.x)
+
+        for i in range(count):
+            self.draw_single_chain_piece(surface, math.degrees(-angle),
+                                         (
+                                             (self.x + 0.5) * self.tileset.size[0] * self.tileset.scale + i *
+                                             math.cos(
+                                                 angle) * self.tileset.chain.get_width(),
+                                             (self.y + 0.5) * self.tileset.size[1] * self.tileset.scale + i *
+                                             math.sin(
+                                                 angle) * self.tileset.chain.get_width()
+            ),
+                offset
+            )
+
         self.weight.render(surface, offset)
+
+    def draw_single_chain_piece(self, surface, angle, pos, offset):
+        chain = self.tileset.chain
+        rotated_chain = pygame.transform.rotate(chain, angle)
+        new_rect = rotated_chain.get_rect(
+            bottomright=chain.get_rect(topleft=pos).center)
+        new_rect = new_rect.move(offset)
+        surface.blit(rotated_chain, new_rect)
 
     def die(self):
         die_sound = mixer.Sound("sounds_effects/gameover.mp3")
