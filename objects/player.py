@@ -2,6 +2,7 @@ from pygame.locals import *
 from objects.moveable import Moveable
 from pygame import mixer
 
+
 class Player(Moveable):
     def __init__(self, tileset, x, y, moveables, collision, weight):
         super().__init__(x, y, tileset, 30, moveables, collision)
@@ -18,14 +19,16 @@ class Player(Moveable):
                 return False
 
             # weightB4 = self.x + dx == self.weight.x and self.y + dy == self.weight.y # se eu estou andando pra cima da bola
-            weightB4 = dx > 0 and self.weight.x > self.x or dx < 0 and self.weight.x < self.x # se eu ando na direção da bola
-            weightB4 |= dy > 0 and self.weight.y > self.y or dy < 0 and self.weight.y < self.y 
+            # se eu ando na direção da bola
+            weightB4 = dx > 0 and self.weight.x > self.x or dx < 0 and self.weight.x < self.x
+            weightB4 |= dy > 0 and self.weight.y > self.y or dy < 0 and self.weight.y < self.y
 
             if weightB4:
-                self.weight.move(dx, dy) # anda ela antes, assim eu não empurro ela
+                # anda ela antes, assim eu não empurro ela
+                self.weight.move(dx, dy)
                 super().move(dx, dy)
             else:
-                super().move(dx, dy) # caso contrário eu ando antes
+                super().move(dx, dy)  # caso contrário eu ando antes
                 self.weight.move(dx, dy)
         else:
             if not self.can_move_to(dx, dy):
@@ -68,19 +71,26 @@ class Player(Moveable):
             elif k == K_d or k == K_RIGHT:
                 return self.move(1, 0)
 
-    def render(self, surface, offset = (0, 0)):
+    def render(self, surface, offset=(0, 0)):
         if self.dead:
             super().render(surface, 59, offset)
         elif self.frozen:
+            self.draw_chain(surface, offset)
             super().render(surface, 60, offset)
         else:
+            self.draw_chain(surface, offset)
             super().render(surface, offset=offset)
+
+    def draw_chain(self, surface, offset):
+        import pygame
+        pygame.draw.line(surface, (255, 255, 255),
+                         ((self.x + 0.5) * self.tileset.size[0] * self.tileset.scale + offset[0], (self.y + 0.5) * self.tileset.size[1] * self.tileset.scale + offset[1]), ((self.weight.x + 0.5) * self.tileset.size[0] * self.tileset.scale + offset[0], (self.weight.y + 0.5) * self.tileset.size[1] * self.tileset.scale + offset[1]))
+        self.weight.render(surface, offset)
 
     def die(self):
         die_sound = mixer.Sound("sounds_effects/gameover.mp3")
         die_sound.play()
         super().die()
-
 
     def weight_die(self):
         self.lock()
