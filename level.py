@@ -1,3 +1,4 @@
+from interactables.box_end import BoxEnd
 from interactables.player_end import PlayerEnd
 from interactables.weight_end import WeightEnd
 import pygame
@@ -9,6 +10,7 @@ import time
 from tileset import TileSet
 from pygame import mixer
 from math import ceil
+
 
 class Level:
     def __init__(self, tileset: TileSet, player, moveables, interactables, decorations, collision, loader):
@@ -23,7 +25,11 @@ class Level:
         self.offset = (0, 0)
         self.loader = loader
         self.complete = None
-        self.ends = list(filter(lambda t: type(t) is PlayerEnd or type(t) is WeightEnd, (interactables[pos] for pos in interactables)))
+        self.ends = list(filter(lambda t:
+                                type(t) is PlayerEnd
+                                or type(t) is WeightEnd
+                                or type(t) is BoxEnd,
+                                (interactables[pos] for pos in interactables)))
         self.button_pressed = False
         self.history = []
 
@@ -33,7 +39,8 @@ class Level:
 
         for x in range(w):
             for y in range(h):
-                surface.blit(self.resized_bg, (x * 128 * self.tileset.scale, y * 128 * self.tileset.scale))
+                surface.blit(self.resized_bg, (x * 128 *
+                             self.tileset.scale, y * 128 * self.tileset.scale))
 
         self.collision.render(surface, self.offset)
 
@@ -41,7 +48,7 @@ class Level:
             dec.render(surface, self.offset)
 
         for pos in self.interactables:
-            self.interactables[pos].render(surface, offset = self.offset)
+            self.interactables[pos].render(surface, offset=self.offset)
 
         for mov in self.moveables:
             mov.render(surface, offset=self.offset)
@@ -100,14 +107,13 @@ class Level:
     def handle_all_events(self, all_events: list[Event]):
         all_events.sort(key=lambda e: e.value)
         if Event.BUTTON_PRESS in all_events:
-            all_events[:] = filter(lambda x: x != Event.BUTTON_UNPRESS, all_events)
+            all_events[:] = filter(
+                lambda x: x != Event.BUTTON_UNPRESS, all_events)
         if Event.UNFREEZE in all_events:
             all_events[:] = filter(lambda x: x != Event.FREEZE, all_events)
 
         for event in all_events:
             self.handle_event(event)
-
-
 
     def handle_event(self, event):
         if event == Event.LEVEL_UNEND:
@@ -140,8 +146,6 @@ class Level:
         elif event == Event.UNFREEZE:
             self.player.unfreeze()
 
-
-
     def resize_tileset(self, width, height):
         th, tw = self.collision.data.shape
         tw *= self.tileset.size[0]
@@ -153,7 +157,8 @@ class Level:
         scale = min(scale_x, scale_y)
 
         self.tileset.resize(scale)
-        self.resized_bg = pygame.transform.scale(self.background, (ceil(128 * scale), ceil(128 * scale)))
+        self.resized_bg = pygame.transform.scale(
+            self.background, (ceil(128 * scale), ceil(128 * scale)))
 
         if scale_x > scale_y:
             self.offset = ((width - scale * tw) / 2, 0)
