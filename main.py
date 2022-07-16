@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from loader import Loader
+from pygame import mixer
 
 class Game:
     def __init__(self, size, loader):
@@ -11,6 +12,9 @@ class Game:
 
     def run(self):
         clock = pygame.time.Clock()
+        back_sound = mixer.Sound("sounds_effects/cave.mp3")
+        back_sound.set_volume(0.3)
+        back_sound.play(loops=1000)
 
         while self.running:
             clock.tick(60)
@@ -30,6 +34,9 @@ class Game:
             self.loader.level.render(self.screen)
 
             pygame.display.flip()
+
+
+
 
 
 
@@ -75,4 +82,5 @@ loader = Loader(level_list, (WIDTH, HEIGHT))
 
 game = Game((WIDTH, HEIGHT), loader)
 game.run()
+
 

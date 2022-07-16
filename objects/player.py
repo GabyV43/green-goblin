@@ -54,7 +54,7 @@ class Player(Moveable):
                 self.weight.push(dx, dy)
 
         feet_sound = mixer.Sound("sounds_effects/walking.mp3")
-        feet_sound.set_volume(0.2)
+        feet_sound.set_volume(0.4)
         feet_sound.play()
 
         return True
@@ -84,20 +84,6 @@ class Player(Moveable):
             super().render(surface, offset=offset)
 
     def draw_chain(self, surface, offset):
-        """pygame.draw.line(surface, (255, 255, 255),
-                         (
-            (self.x + 0.5) *
-            self.tileset.size[0] * self.tileset.scale + offset[0],
-            (self.y + 0.5) *
-            self.tileset.size[1] * self.tileset.scale + offset[1]
-        ), (
-            (self.weight.x + 0.5) *
-            self.tileset.size[0] * self.tileset.scale + offset[0],
-            (self.weight.y + 0.5) *
-            self.tileset.size[1] * self.tileset.scale + offset[1]
-        )
-        )"""
-
         dist_px = math.sqrt(((self.x - self.weight.x) * self.tileset.size[0]) ** 2 + (
             (self.y - self.weight.y) * self.tileset.size[1]) ** 2)
 
@@ -142,10 +128,16 @@ class Player(Moveable):
     def freeze(self):
         self.frozen = True
         self.weight.freeze()
+        freeze_sound = mixer.Sound("sounds_effects/freeze.mp3")
+        # freeze_sound.set_volume(0.3)
+        freeze_sound.play()
 
     def unfreeze(self):
         self.frozen = False
         self.weight.unfreeze()
+        unfreeze_sound = mixer.Sound("sounds_effects/unfreeze.mp3")
+        # unfreeze_sound.set_volume(0.3)
+        unfreeze_sound.play()
 
     def get_state(self):
         return (

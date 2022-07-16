@@ -124,10 +124,13 @@ class Level:
             self.player.die()
         elif event == Event.WEIGHT_DIE:
             self.player.weight_die()
+            fall_sound = mixer.Sound("sounds_effects/girlfall.mp3")
+            # fall_sound.set_volume(0.3)
+            fall_sound.play()
         elif event == Event.BUTTON_PRESS:
             if not self.button_pressed:
                 button_sound = mixer.Sound("sounds_effects/button_press.mp3")
-                button_sound.set_volume(0.5)
+                # button_sound.set_volume(0.5)
                 button_sound.play()
                 for pos in self.interactables:
                     inter = self.interactables[pos]
