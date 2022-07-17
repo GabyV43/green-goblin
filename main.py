@@ -6,6 +6,7 @@ from button_menu import ButtonMenu
 from loader import Loader
 from pygame import mixer
 
+
 class Game:
     def __init__(self, size, loader, state):
         pygame.init()
@@ -13,7 +14,6 @@ class Game:
         self.loader = loader
         self.running = True
         self.state = state
-
 
     def run(self):
         clock = pygame.time.Clock()
@@ -24,8 +24,8 @@ class Game:
         while self.running:
             clock.tick(60)
 
-            #Replace with background image
-            self.screen.fill((50, 50, 50))
+            # Replace with background image
+            self.screen.fill((51, 60, 64))
 
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -50,7 +50,8 @@ class Game:
                     if pygame.mouse.get_pressed()[0]:
                         if button.contains(mousex, mousey):
                             if button.on:
-                                self.loader.load_level_number(button.number - 1)
+                                self.loader.load_level_number(
+                                    button.number - 1)
                                 self.state = "game"
 
             elif self.state == "game":
@@ -90,7 +91,7 @@ level_list = [
     "maps/fogo1.tmx",
     "maps/level2.5.tmx",
     # 1~2 fases de slime
-    "maps/level3.tmx", # trocar essa fase pelo amor de deus
+    "maps/level3.tmx",  # trocar essa fase pelo amor de deus
     "maps/wood1.tmx",
     "maps/intromad.tmx",
     "maps/level5.tmx",
@@ -116,5 +117,3 @@ except:
 book = Book("images/book.png", 10, (WIDTH, HEIGHT), level_list, lvl_num, font)
 
 game.run()
-
-

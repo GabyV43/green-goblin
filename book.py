@@ -13,6 +13,9 @@ class Book():
 
         self.buttons = []
 
+        self.off_x = 0
+        self.off_y = 0
+
         self.resize(screen_size)
         self.generate_buttons(level_list, font)
 
@@ -28,12 +31,25 @@ class Book():
 
         self.scale = min(scale_x, scale_y)
 
-        self.image = pygame.transform.scale(self.original_image, (orig_width * self.scale, orig_height * self.scale))
+        self.image = pygame.transform.scale(
+            self.original_image, (orig_width * self.scale, orig_height * self.scale))
         for button in self.buttons:
             button.resize(self.scale)
 
+        if scale_x < scale_y:
+            self.off_x = 0
+            self.off_y = (screen_size[1] - self.image.get_height()) // 2
+        else:
+            self.off_x = (screen_size[0] - self.image.get_width()) // 2
+            self.off_y = 0
+
+        for btn in self.buttons:
+            btn.offsetx = self.margin + self.off_x
+            btn.offsety = self.margin + self.off_y
+
     def render(self, surface):
-        surface.blit(self.image, (self.margin, self.margin))
+        surface.blit(self.image, (self.margin +
+                     self.off_x, self.margin + self.off_y))
 
         for button in self.buttons:
             button.render(surface)
@@ -41,13 +57,13 @@ class Book():
     def generate_buttons(self, level_list, font):
         self.buttons = []
 
-        start_x = 26
+        start_x = 27
         start_y = 22
 
         btn_size = 13
         spacing_x = 5
         spacing_y = 4
-        page_width = 75
+        page_width = 74
 
         line = 0
         column = 0
@@ -67,7 +83,8 @@ class Book():
             if i <= self.level_complete:
                 valor = True
 
-            btn = ButtonMenu(x, y, valor, i + 1, self.scale, self.margin, self.margin, font)
+            btn = ButtonMenu(x, y, valor, i + 1, self.scale,
+                             self.margin + self.off_x, self.margin + self.off_y, font)
 
             self.buttons.append(btn)
 
@@ -91,6 +108,3 @@ class Book():
         for i, button in enumerate(self.buttons):
             if i <= self.level_complete:
                 button.on = True
-
-
-
