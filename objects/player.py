@@ -44,6 +44,9 @@ class Player(Moveable):
             is_right_dir = self.x + dx == self.weight.x or self.y + dy == self.weight.y
 
             if is_pulling_weight and not is_right_dir:
+                chain_sound = mixer.Sound("sounds_effects/chain.mp3")
+                # feet_sound.set_volume(0.2)
+                chain_sound.play()
                 return False
 
             if is_pulling_weight and not self.weight.can_move_to(dx, dy):
@@ -84,22 +87,9 @@ class Player(Moveable):
             super().render(surface, offset=offset)
 
     def draw_chain(self, surface, offset):
-        """pygame.draw.line(surface, (255, 255, 255),
-                         (
-            (self.x + 0.5) *
-            self.tileset.size[0] * self.tileset.scale + offset[0],
-            (self.y + 0.5) *
-            self.tileset.size[1] * self.tileset.scale + offset[1]
-        ), (
-            (self.weight.x + 0.5) *
-            self.tileset.size[0] * self.tileset.scale + offset[0],
-            (self.weight.y + 0.5) *
-            self.tileset.size[1] * self.tileset.scale + offset[1]
-        )
-        )"""
-
-        dist_px = math.sqrt(((self.x - self.weight.x) * self.tileset.size[0]) ** 2 + (
-            (self.y - self.weight.y) * self.tileset.size[1]) ** 2)
+        dist_px = math.sqrt(
+            ((self.x - self.weight.x) * self.tileset.size[0]) ** 2 +
+            ((self.y - self.weight.y) * self.tileset.size[1]) ** 2)
 
         chain_width = self.tileset.chain_original.get_width()
         count = math.ceil(dist_px / chain_width)
@@ -122,7 +112,10 @@ class Player(Moveable):
         self.weight.render(surface, offset)
 
     def draw_single_chain_piece(self, surface, angle, pos, offset):
-        chain = self.tileset.chain
+        if self.frozen:
+            chain = self.tileset.chain_frozen
+        else:
+            chain = self.tileset.chain
         rotated_chain = pygame.transform.rotate(chain, angle)
         new_rect = rotated_chain.get_rect(
             bottomright=chain.get_rect(topleft=pos).center)

@@ -12,6 +12,7 @@ class TileSet:
 
         self.chain_original = pygame.image.load("images/chain.png")
         self.chain = None
+        self.chain_frozen = None
 
         self.image = pygame.image.load(file)
         self.original_tiles = []
@@ -45,3 +46,11 @@ class TileSet:
         chain_size = self.chain_original.get_size()
         self.chain = pygame.transform.scale(self.chain_original, (ceil(
             chain_size[0] * scale + offset[0]), ceil(chain_size[1] * scale + offset[1])))
+        self.chain_frozen = pygame.Surface(self.chain.get_size(), SRCALPHA)
+        self.chain_frozen.blit(self.chain, (0, 0))
+        w, h = self.chain_frozen.get_size()
+        r, g, b = (62, 167, 197)
+        for x in range(w):
+            for y in range(h):
+                a = self.chain_frozen.get_at((x, y))[3]
+                self.chain_frozen.set_at((x, y), pygame.Color(r, g, b, a))

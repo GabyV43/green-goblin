@@ -166,7 +166,8 @@ class Level:
             self.offset = (0, (height - scale * th) / 2)
 
     def check_win(self):
-        if all(map(lambda e: e.active, self.ends)):
+        print(self.player.dead)
+        if all(map(lambda e: e.active, self.ends)) and not self.player.dead:
             self.complete = time.time()
 
     def get_state(self):
