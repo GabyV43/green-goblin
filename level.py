@@ -33,6 +33,8 @@ class Level:
         self.button_pressed = False
         self.history = []
 
+        self.level_completed = False
+
     def render(self, surface: Surface):
         w = int(surface.get_width() // self.tileset.scale // 4)
         h = int(surface.get_height() // self.tileset.scale // 4)
@@ -56,10 +58,12 @@ class Level:
         self.player.render(surface, self.offset)
 
         if self.complete is not None:
+            self.level_completed = True
             win_sound = mixer.Sound("sounds_effects/win.mp3")
             win_sound.set_volume(0.15)
             win_sound.play()
             if time.time() - self.complete > 0.5:
+                print("WUT")
                 self.loader.load_next_level()
 
     def update(self, event):
@@ -124,10 +128,13 @@ class Level:
             self.player.die()
         elif event == Event.WEIGHT_DIE:
             self.player.weight_die()
+            fall_sound = mixer.Sound("sounds_effects/girlfall.mp3")
+            # fall_sound.set_volume(0.3)
+            fall_sound.play()
         elif event == Event.BUTTON_PRESS:
             if not self.button_pressed:
                 button_sound = mixer.Sound("sounds_effects/button_press.mp3")
-                button_sound.set_volume(0.5)
+                # button_sound.set_volume(0.5)
                 button_sound.play()
                 for pos in self.interactables:
                     inter = self.interactables[pos]

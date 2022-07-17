@@ -30,7 +30,7 @@ WOOD_ID = 204
 HOLE_ID = 206
 SPIKE_ID = 208
 BUTTON_ID = 262
-HEAVY_BUTTON_ID = 264
+HEAVY_BUTTON_ID = 263
 ICE_ID = 378
 FIRE_ID = 408
 WEIGHT_END_ID = 523
@@ -184,6 +184,10 @@ class Loader():
         self.level.resize_tileset(self.screen_size[0], self.screen_size[1])
 
         return self.level
+
+    def load_level_number(self, number):
+        self.current_level = number
+        self.reload()
 
     def reload(self):
         level_name = self.level_list[self.current_level]

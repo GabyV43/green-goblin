@@ -57,7 +57,7 @@ class Player(Moveable):
                 self.weight.push(dx, dy)
 
         feet_sound = mixer.Sound("sounds_effects/walking.mp3")
-        feet_sound.set_volume(0.2)
+        feet_sound.set_volume(0.4)
         feet_sound.play()
 
         return True
@@ -135,10 +135,16 @@ class Player(Moveable):
     def freeze(self):
         self.frozen = True
         self.weight.freeze()
+        freeze_sound = mixer.Sound("sounds_effects/freeze.mp3")
+        # freeze_sound.set_volume(0.3)
+        freeze_sound.play()
 
     def unfreeze(self):
         self.frozen = False
         self.weight.unfreeze()
+        unfreeze_sound = mixer.Sound("sounds_effects/unfreeze.mp3")
+        # unfreeze_sound.set_volume(0.3)
+        unfreeze_sound.play()
 
     def get_state(self):
         return (
