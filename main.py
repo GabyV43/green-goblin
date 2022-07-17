@@ -1,20 +1,25 @@
+from operator import contains
 import pygame
 from pygame.locals import *
+from book import Book
+from button_menu import ButtonMenu
 from loader import Loader
 from pygame import mixer
 
 class Game:
-    def __init__(self, size, loader):
+    def __init__(self, size, loader, state):
         pygame.init()
         self.screen = pygame.display.set_mode(size, RESIZABLE)
         self.loader = loader
         self.running = True
+        self.state = state
+
 
     def run(self):
         clock = pygame.time.Clock()
         back_sound = mixer.Sound("sounds_effects/cave.mp3")
         back_sound.set_volume(0.3)
-        back_sound.play(loops=1000)
+        # back_sound.play(loops=1000)
 
         while self.running:
             clock.tick(60)
@@ -28,16 +33,33 @@ class Game:
                 elif event.type == WINDOWRESIZED or event.type == WINDOWSIZECHANGED:
                     width, height = pygame.display.get_surface().get_size()
                     self.loader.resize_tileset(width, height)
-                else:
-                    self.loader.level.update(event)
+                    book.resize((width, height))
+                elif event.type == KEYDOWN:
+                    if event.key == K_ESCAPE:
+                        self.state = "menu"
+                self.loader.level.update(event)
 
-            self.loader.level.render(self.screen)
+            if self.state == "menu":
+
+                book.render(self.screen)
+
+                mousex, mousey = pygame.mouse.get_pos()
+
+                for button in book.buttons:
+                    button.render(self.screen)
+                    if pygame.mouse.get_pressed()[0]:
+                        if button.contains(mousex, mousey):
+                            if button.on:
+                                self.loader.load_level_number(button.number - 1)
+                                self.state = "game"
+
+            elif self.state == "game":
+                self.loader.level.render(self.screen)
+
+                if self.loader.level.level_completed:
+                    book.set_level(self.loader.current_level + 1)
 
             pygame.display.flip()
-
-
-
-
 
 
 WIDTH = 640
@@ -80,7 +102,19 @@ level_list = [
 ]
 loader = Loader(level_list, (WIDTH, HEIGHT))
 
-game = Game((WIDTH, HEIGHT), loader)
+game = Game((WIDTH, HEIGHT), loader, "menu")
+
+font = pygame.font.Font('./fonts/slkscr.ttf', 8)
+
+try:
+    file = open("save.txt")
+    lvl_num = int(file.readlines()[0].strip())
+    file.close()
+except:
+    lvl_num = 0
+
+book = Book("images/book.png", 10, (WIDTH, HEIGHT), level_list, lvl_num, font)
+
 game.run()
 
 

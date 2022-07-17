@@ -185,6 +185,10 @@ class Loader():
 
         return self.level
 
+    def load_level_number(self, number):
+        self.current_level = number
+        self.reload()
+
     def reload(self):
         level_name = self.level_list[self.current_level]
         self.load_level(level_name)
