@@ -48,8 +48,11 @@ class Game:
                 for button in book.buttons:
                     button.render(self.screen)
                     if pygame.mouse.get_pressed()[0]:
+                        print("pressed")
                         if button.contains(mousex, mousey):
+                            print("contains")
                             if button.on:
+                                print("on")
                                 self.loader.load_level_number(
                                     button.number - 1)
                                 self.state = "game"

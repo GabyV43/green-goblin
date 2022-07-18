@@ -50,7 +50,7 @@ class ButtonMenu():
                          self.text_off_x_redim, self.offsety + self.yredim + self.text_off_y_redim))
 
     def contains(self, x, y):
-        if x >= self.xredim and x <= self.xredim + self.width:
-            if y >= self.yredim and y <= self.yredim + self.height:
+        if x >= self.xredim + self.offsetx and x <= self.xredim + self.width + self.offsetx:
+            if y >= self.yredim + self.offsety and y <= self.yredim + self.height + self.offsety:
                 return True
         return False
