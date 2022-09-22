@@ -5,6 +5,7 @@ import pygame
 from pygame import Surface
 from pygame.locals import *
 from event import Event
+from objects.weight import Weight
 from interactables.slime import Slime
 import time
 from tileset import TileSet
@@ -173,8 +174,8 @@ class Level:
             self.offset = (0, (height - scale * th) / 2)
 
     def check_win(self):
-        print(self.player.dead)
-        if all(map(lambda e: e.active, self.ends)) and not self.player.dead:
+        print(all(map(lambda e: e.active, self.ends)), not self.player.dead, not self.player.weight_dead)
+        if all(map(lambda e: e.active, self.ends)) and not self.player.dead and not self.player.weight_dead:
             self.complete = time.time()
 
     def get_state(self):

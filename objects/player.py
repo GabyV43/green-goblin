@@ -11,6 +11,7 @@ class Player(Moveable):
         self.weight = weight
         self.dead = False
         self.frozen = False
+        self.weight_dead = False
 
     def move(self, dx, dy):
         if self.frozen:
@@ -80,10 +81,12 @@ class Player(Moveable):
         if self.dead:
             super().render(surface, 59, offset)
         elif self.frozen:
-            self.draw_chain(surface, offset)
+            if not self.disappeared:
+                self.draw_chain(surface, offset)
             super().render(surface, 60, offset)
         else:
-            self.draw_chain(surface, offset)
+            if not self.disappeared:
+                self.draw_chain(surface, offset)
             super().render(surface, offset=offset)
 
     def draw_chain(self, surface, offset):
@@ -128,23 +131,26 @@ class Player(Moveable):
         super().die()
 
     def weight_die(self):
+        self.weight_dead = True
         self.lock()
         self.disappear()
         self.weight.disappear()
 
     def freeze(self):
-        self.frozen = True
-        self.weight.freeze()
-        freeze_sound = mixer.Sound("sounds_effects/freeze.mp3")
+        if not self.frozen:
+            self.frozen = True
+            self.weight.freeze()
+            freeze_sound = mixer.Sound("sounds_effects/freeze.mp3")
         # freeze_sound.set_volume(0.3)
-        freeze_sound.play()
+            freeze_sound.play()
 
     def unfreeze(self):
-        self.frozen = False
-        self.weight.unfreeze()
-        unfreeze_sound = mixer.Sound("sounds_effects/unfreeze.mp3")
-        # unfreeze_sound.set_volume(0.3)
-        unfreeze_sound.play()
+        if self.frozen:
+            self.frozen = False
+            self.weight.unfreeze()
+            unfreeze_sound = mixer.Sound("sounds_effects/unfreeze.mp3")
+            # unfreeze_sound.set_volume(0.3)
+            unfreeze_sound.play()
 
     def get_state(self):
         return (
@@ -156,6 +162,7 @@ class Player(Moveable):
             self.disappeared,
             self.locked,
             self.frozen,
+            self.weight_dead,
         )
 
     def load_state(self, state):
@@ -167,3 +174,4 @@ class Player(Moveable):
         self.disappeared = state[5]
         self.locked = state[6]
         self.frozen = state[7]
+        self.weight_dead = state[8]
