@@ -6,3 +6,5 @@ __*
 !.gitignore
 
 save.txt
+*.zip
+*.rar
