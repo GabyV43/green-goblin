@@ -48,14 +48,17 @@ class Game:
                 for button in book.buttons:
                     button.render(self.screen)
                     if pygame.mouse.get_pressed()[0]:
-                        print("pressed")
                         if button.contains(mousex, mousey):
-                            print("contains")
                             if button.on:
                                 print("on")
                                 self.loader.load_level_number(
                                     button.number - 1)
                                 self.state = "game"
+                    if pygame.mouse.get_pressed()[1]:
+                        if button.contains(mousex, mousey):
+                            self.loader.load_level_number(
+                                button.number - 1)
+                            self.state = "game"
 
             elif self.state == "game":
                 self.loader.level.render(self.screen)
@@ -103,6 +106,7 @@ level_list = [
     # "maps/level6.tmx",
     "maps/level6v2.tmx",
     "maps/level10.tmx",
+    "maps/gelo-hard.tmx",
 ]
 loader = Loader(level_list, (WIDTH, HEIGHT))
 
