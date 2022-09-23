@@ -39,13 +39,14 @@ BOX_END_ID = 553
 SLIME_IDS = [527, 556, 585, 470, 471, 472, 529, 558, 587, 562, 563, 564]
 SLIME_IN_IDS = [266, 267, 268, 323, 352, 381, 325, 354, 383, 358, 359, 360]
 
+
 class Loader():
-    def __init__(self, level_list, screen_size):
+    def __init__(self, level_list, screen_size, current_level=0):
         self.tileset = None
         self.screen_size = screen_size
         self.level_list = level_list
-        self.current_level = 0
-        self.load_level(level_list[0])
+        self.current_level = current_level
+        self.load_level(level_list[current_level])
 
     def load_tileset(self, file, tw, th, scale):
         if self.tileset is not None and self.tileset.file == file:
@@ -99,9 +100,11 @@ class Loader():
 
                 id = matrix[iy, ix] - 1
                 if id == PLAYER_ID:
-                    self.player = obj = Player(self.tileset, ix, iy, self.moveables, is_wall, None)
+                    self.player = obj = Player(
+                        self.tileset, ix, iy, self.moveables, is_wall, None)
                 elif id == WEIGHT_ID:
-                    self.weight = obj = Weight(ix, iy, self.tileset, self.moveables, is_wall)
+                    self.weight = obj = Weight(
+                        ix, iy, self.tileset, self.moveables, is_wall)
                 elif id == BOX_ID:
                     obj = Box(ix, iy, self.tileset, self.moveables, is_wall)
                 elif id == WOOD_ID:
@@ -129,7 +132,7 @@ class Loader():
                 elif id in SLIME_IN_IDS:
                     inter = Slime(ix, iy, self.tileset, id + 204, False)
                 elif id == -1:
-                    pass # In this case there is nothing there
+                    pass  # In this case there is nothing there
                 else:
                     raise Exception(f"Unkown id {id}")
 
@@ -153,7 +156,8 @@ class Loader():
         root = tree.getroot()
 
         if root.tag != 'map':
-            raise Exception("Level file is configured incorrectly, please load a proper .tmx file")
+            raise Exception(
+                "Level file is configured incorrectly, please load a proper .tmx file")
 
         self.order = root.attrib["renderorder"]
 
@@ -204,4 +208,3 @@ class Loader():
     def resize_tileset(self, width, height):
         self.screen_size = [width, height]
         self.level.resize_tileset(width, height)
-
