@@ -1,4 +1,5 @@
 from operator import contains
+from typing import Tuple
 import pygame
 from pygame.locals import *
 from book import Book
@@ -7,14 +8,19 @@ from loader import Loader
 from pygame import mixer
 
 
-
 class Game:
-    def __init__(self, size, loader, state):
-        pygame.init()
+    def __init__(self, size: Tuple[int, int], loader: Loader, book: Book, state: str):
+        info = pygame.display.Info()  # You have to call this before pygame.display.set_mode()
+        screen_width, screen_height = info.current_w, info.current_h
+        size = (screen_width-10, screen_height-50)
+        loader.resize_tileset(*size)
+        book.resize(size)
+
         self.screen = pygame.display.set_mode(size, RESIZABLE)
         self.loader = loader
         self.running = True
         self.state = state
+        self.book = book
 
     def run(self):
         clock = pygame.time.Clock()
@@ -34,7 +40,7 @@ class Game:
                 elif event.type == WINDOWRESIZED or event.type == WINDOWSIZECHANGED:
                     width, height = pygame.display.get_surface().get_size()
                     self.loader.resize_tileset(width, height)
-                    book.resize((width, height))
+                    self.book.resize((width, height))
                 elif event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
                         self.state = "menu"
@@ -44,11 +50,11 @@ class Game:
             #     curscene.preview()
             if self.state == "menu":
 
-                book.render(self.screen)
+                self.book.render(self.screen)
 
                 mousex, mousey = pygame.mouse.get_pos()
 
-                for button in book.buttons:
+                for button in self.book.buttons:
                     button.render(self.screen)
                     if pygame.mouse.get_pressed()[0]:
                         if button.contains(mousex, mousey):
@@ -67,13 +73,10 @@ class Game:
                 self.loader.level.render(self.screen)
 
                 if self.loader.level.level_completed:
-                    book.set_level(self.loader.current_level + 1)
+                    self.book.set_level(self.loader.current_level + 1)
 
             pygame.display.flip()
 
-
-WIDTH = 640
-HEIGHT = 640
 
 """ TODO
 - 2 fases int. gelo OK
@@ -100,7 +103,7 @@ level_list = [
     "maps/fogo1.tmx",
     "maps/level2.5.tmx",
     # 1~2 fases de slime
-    "maps/level3.tmx",  #intro slime
+    "maps/level3.tmx",  # intro slime
     "maps/wood1.tmx",
     "maps/intromad.tmx",
     "maps/level5.tmx",
@@ -111,9 +114,12 @@ level_list = [
     "maps/level10.tmx",
     "maps/gelo-hard.tmx",
 ]
-loader = Loader(level_list, (WIDTH, HEIGHT))
 
-game = Game((WIDTH, HEIGHT), loader, "menu")
+WIDTH, HEIGHT = 800, 600
+
+loader = Loader(level_list, (WIDTH, HEIGHT), 24)
+
+pygame.init()
 
 font = pygame.font.Font('./fonts/slkscr.ttf', 8)
 
@@ -126,4 +132,5 @@ except:
 
 book = Book("images/book.png", 10, (WIDTH, HEIGHT), level_list, lvl_num, font)
 
+game = Game((WIDTH, HEIGHT), loader, book, "game")  # "menu")
 game.run()
