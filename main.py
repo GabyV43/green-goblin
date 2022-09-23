@@ -7,6 +7,7 @@ from loader import Loader
 from pygame import mixer
 
 
+
 class Game:
     def __init__(self, size, loader, state):
         pygame.init()
@@ -38,7 +39,9 @@ class Game:
                     if event.key == K_ESCAPE:
                         self.state = "menu"
                 self.loader.level.update(event)
-
+            # if self.state == "video":
+            #     cutscene = moviepy.editor.VideoFileClip("video/opendoor_new.mp4")
+            #     curscene.preview()
             if self.state == "menu":
 
                 book.render(self.screen)
@@ -50,7 +53,7 @@ class Game:
                     if pygame.mouse.get_pressed()[0]:
                         if button.contains(mousex, mousey):
                             if button.on:
-                                print("on")
+                                # print("on")
                                 self.loader.load_level_number(
                                     button.number - 1)
                                 self.state = "game"
@@ -97,7 +100,7 @@ level_list = [
     "maps/fogo1.tmx",
     "maps/level2.5.tmx",
     # 1~2 fases de slime
-    "maps/level3.tmx",  # trocar essa fase pelo amor de deus
+    "maps/level3.tmx",  #intro slime
     "maps/wood1.tmx",
     "maps/intromad.tmx",
     "maps/level5.tmx",

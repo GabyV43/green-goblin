@@ -1,13 +1,13 @@
 # n = altura
 # m = largura
 
-n_linhas, n_colunas = map(int, input().split())
+# n_linhas, n_colunas = map(int, input().split())
 
-matrizA = []
+# matrizA = []
 
-for i in range(n_linhas):
-    linha = list(map(int, input().split()))
-    matrizA.append(linha)
+# for i in range(n_linhas):
+#     linha = list(map(int, input().split()))
+#     matrizA.append(linha)
 
 # matrizB = []
 
@@ -60,14 +60,54 @@ for i in range(n_linhas):
 
 # soma debaixo da diagonal
 
-if n_linhas == n_colunas:
-    soma = 0
-    for i in range(n_linhas):
-        for j in range(n_colunas):
-            if i > j:
-                soma += matrizA[i][j]
+# if n_linhas == n_colunas:
+#     soma = 0
+#     for i in range(n_linhas):
+#         for j in range(n_colunas):
+#             if i > j:
+#                 soma += matrizA[i][j]
 
-    soma2 = 0
-    for j in range(n_colunas):
-        for i in range(j+1, n_linhas):
-            soma2 += matrizA[i][j]
+#     soma2 = 0
+#     for j in range(n_colunas):
+#         for i in range(j+1, n_linhas):
+#             soma2 += matrizA[i][j]
+
+
+# n_jogos = int(input())
+
+# for i in range(n_jogos):
+#     sequence = input()
+#     if 'Q' in sequence and 'J' in sequence and 'K' in sequence and 'A' in sequence:
+#         print("Aaah muleke")
+#     else:
+#         print("Ooo raca viu")
+
+
+
+
+while True:
+
+    try:
+        epr = 0
+        ehd = 0
+        sus = 0
+
+        alunos = int(input())
+
+        for i in range(alunos):
+            matriculas, cursos = map(str, input().split())
+            if 'EPR' in cursos:
+                epr += 1
+            elif 'EHD' in cursos:
+                ehd += 1
+            else:
+                sus += 1
+
+        print("EPR:", epr)
+        print("EHD:", ehd)
+        print("INTRUSOS:", sus)
+
+    except EOFError:
+        break
+
+
