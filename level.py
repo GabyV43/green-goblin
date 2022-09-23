@@ -64,7 +64,6 @@ class Level:
             win_sound.set_volume(0.15)
             win_sound.play()
             if time.time() - self.complete > 0.5:
-                print("WUT")
                 self.loader.load_next_level()
 
     def update(self, event):
@@ -174,7 +173,7 @@ class Level:
             self.offset = (0, (height - scale * th) / 2)
 
     def check_win(self):
-        print(all(map(lambda e: e.active, self.ends)), not self.player.dead, not self.player.weight_dead)
+        # print(all(map(lambda e: e.active, self.ends)), not self.player.dead, not self.player.weight_dead)
         if all(map(lambda e: e.active, self.ends)) and not self.player.dead and not self.player.weight_dead:
             self.complete = time.time()
 
