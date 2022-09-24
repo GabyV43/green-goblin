@@ -12,7 +12,7 @@ class Game:
     def __init__(self, size: Tuple[int, int], loader: Loader, book: Book, state: str):
         info = pygame.display.Info()  # You have to call this before pygame.display.set_mode()
         screen_width, screen_height = info.current_w, info.current_h
-        size = (screen_width-10, screen_height-50)
+        size = (screen_width-10, screen_height-100)
         loader.resize_tileset(*size)
         book.resize(size)
 
@@ -43,7 +43,10 @@ class Game:
                     self.book.resize((width, height))
                 elif event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
-                        self.state = "menu"
+                        if self.state == "game":
+                            self.state = "menu"
+                        else:
+                            self.running = False
                 self.loader.level.update(event)
             # if self.state == "video":
             #     cutscene = moviepy.editor.VideoFileClip("video/opendoor_new.mp4")
@@ -117,7 +120,7 @@ level_list = [
 
 WIDTH, HEIGHT = 800, 600
 
-loader = Loader(level_list, (WIDTH, HEIGHT), 24)
+loader = Loader(level_list, (WIDTH, HEIGHT))
 
 pygame.init()
 
@@ -132,5 +135,5 @@ except:
 
 book = Book("images/book.png", 10, (WIDTH, HEIGHT), level_list, lvl_num, font)
 
-game = Game((WIDTH, HEIGHT), loader, book, "game")  # "menu")
+game = Game((WIDTH, HEIGHT), loader, book, "menu")
 game.run()
