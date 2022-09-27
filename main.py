@@ -116,6 +116,7 @@ level_list = [
     "maps/level6v2.tmx",
     "maps/level10.tmx",
     "maps/gelo-hard.tmx",
+    "maps/ECM.tmx",
 ]
 
 WIDTH, HEIGHT = 800, 600
