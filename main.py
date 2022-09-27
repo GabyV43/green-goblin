@@ -117,11 +117,12 @@ level_list = [
     "maps/level10.tmx",
     "maps/gelo-hard.tmx",
     "maps/fases_gaby/ECM.tmx",
+    "maps/fases_mark/box_hard.tmx",
 ]
 
 WIDTH, HEIGHT = 800, 600
 
-loader = Loader(level_list, (WIDTH, HEIGHT))
+loader = Loader(level_list, (WIDTH, HEIGHT), -1)
 
 pygame.init()
 
@@ -136,5 +137,5 @@ except:
 
 book = Book("images/book.png", 10, (WIDTH, HEIGHT), level_list, lvl_num, font)
 
-game = Game((WIDTH, HEIGHT), loader, book, "menu")
+game = Game((WIDTH, HEIGHT), loader, book, "game")  # "menu")
 game.run()
