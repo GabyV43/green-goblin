@@ -48,7 +48,7 @@ class Loader():
         self.current_level = current_level
         self.load_level(level_list[current_level])
 
-    def load_tileset(self, file, tw, th, scale):
+    def load_tileset(self, level_path, file, tw, th, scale):
         if self.tileset is not None and self.tileset.file == file:
             return
 
@@ -150,7 +150,7 @@ class Loader():
             raise Exception("Invalid encoding:", encoding)
 
     def load_level(self, name):
-        print(name)
+        print(os.path.split(name)[-1])
         tree = ET.parse(name)
 
         root = tree.getroot()
@@ -165,7 +165,8 @@ class Loader():
         tw, th = int(root.attrib["tilewidth"]), int(root.attrib["tileheight"])
         w, h = int(root.attrib["width"]), int(root.attrib["height"])
         sx, sy = self.screen_size[0] / (tw * w), self.screen_size[1] / (th * h)
-        self.load_tileset(tileset_el.attrib["source"], tw, th, min(sx, sy))
+        self.load_tileset(os.path.dirname(
+            name), tileset_el.attrib["source"], tw, th, min(sx, sy))
 
         self.collision = self.load_layer(root[1])
 
