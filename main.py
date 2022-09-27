@@ -118,6 +118,7 @@ level_list = [
     "maps/gelo-hard.tmx",
     "maps/fases_gaby/ECM.tmx",
     "maps/fases_gaby/ECM2.tmx",
+    "maps/fases_mark/box_hard.tmx",
 ]
 
 WIDTH, HEIGHT = 800, 600
