@@ -182,7 +182,8 @@ class Loader():
             self.interactables,
             self.decorations,
             self.collision,
-            self
+            self,
+            os.path.split(name)[-1]
         )
 
         self.level.resize_tileset(self.screen_size[0], self.screen_size[1])

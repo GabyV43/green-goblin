@@ -1,3 +1,4 @@
+from email import message
 from interactables.box_end import BoxEnd
 from interactables.player_end import PlayerEnd
 from interactables.weight_end import WeightEnd
@@ -14,7 +15,7 @@ from math import ceil
 
 
 class Level:
-    def __init__(self, tileset: TileSet, player, moveables, interactables, decorations, collision, loader):
+    def __init__(self, tileset: TileSet, player, moveables, interactables, decorations, collision, loader, name):
         self.tileset = tileset
         self.player = player
         self.moveables = moveables
@@ -25,6 +26,7 @@ class Level:
         self.resized_bg = self.background
         self.offset = (0, 0)
         self.loader = loader
+        self.name = name
         self.complete = None
         self.ends = list(filter(lambda t:
                                 type(t) is PlayerEnd
@@ -35,6 +37,12 @@ class Level:
         self.history = []
 
         self.level_completed = False
+
+        self.stop_message = False
+        self.message_shown = False
+        self.click_r = 0
+        self.click_z = 0
+
 
     def render(self, surface: Surface):
         w = int(surface.get_width() // self.tileset.scale // 4)
@@ -58,6 +66,8 @@ class Level:
 
         self.player.render(surface, self.offset)
 
+        self.appear_screen(surface)
+
         if self.complete is not None:
             self.level_completed = True
             win_sound = mixer.Sound("sounds_effects/win.mp3")
@@ -65,6 +75,8 @@ class Level:
             win_sound.play()
             if time.time() - self.complete > 0.5:
                 self.loader.load_next_level()
+
+
 
     def update(self, event):
         if self.complete is not None:
@@ -79,12 +91,14 @@ class Level:
         updated = self.player.update(event)
         if event.type == KEYDOWN:
             if event.key == K_r:
-                self.loader.reload()
+                self.click_r += 1
+                self.reload()
             elif event.key == K_n:
                 self.loader.load_next_level()
             elif event.key == K_p:
                 self.loader.load_prev_level()
             elif event.key == K_z:
+                self.click_z += 1
                 self.undo()
 
         if not updated:
@@ -190,10 +204,50 @@ class Level:
             return
 
         general_state = self.history.pop()
-        self.load_state(general_state[0])
+        self.load_general_state(general_state)
 
-        for m, s in zip(self.moveables, general_state[1]):
+    def reload(self):
+        if len(self.history) == 0:
+            return
+        general_state = self.history[0]
+        current_state = (
+            self.get_state(),
+            [m.get_state() for m in self.moveables],
+            [i.get_state() for i in self.interactables.values()]
+        )
+        self.history.append(current_state)
+        self.load_general_state(general_state)
+
+        print(self.history)
+
+
+    def load_general_state(self, state):
+        self.load_state(state[0])
+
+        for m, s in zip(self.moveables, state[1]):
             m.load_state(s)
 
-        for i, s in zip(self.interactables.values(), general_state[2]):
+        for i, s in zip(self.interactables.values(), state[2]):
             i.load_state(s)
+
+
+    def appear_screen(self, surface):
+        if self.stop_message == True:
+            return
+
+        if self.name == "level2.tmx":
+            if self.message_shown or self.player.weight.x == 4 and self.player.weight.y == 8:
+                self.message_shown = True
+                warn = pygame.image.load("images/message.png")
+                surface.blit(warn, (0,0))
+            if self.click_z != 0 and self.click_r != 0:
+                self.stop_message = True
+        else:
+            if self.name == "intfinalbox.tmx":
+                warn = pygame.image.load("images/message.png")
+                surface.blit(warn, (0,0))
+                if len(self.history) >= 10:
+                    self.stop_message = True
+
+
+
