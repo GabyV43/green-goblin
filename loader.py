@@ -48,11 +48,11 @@ class Loader():
         self.current_level = current_level
         self.load_level(level_list[current_level])
 
-    def load_tileset(self, file, tw, th, scale):
+    def load_tileset(self, level_path, file, tw, th, scale):
         if self.tileset is not None and self.tileset.file == file:
             return
 
-        path = os.path.join('maps', file)
+        path = os.path.join(level_path, file)
         tree = ET.parse(path)
         root = tree.getroot()
         image = root[0]
@@ -66,7 +66,7 @@ class Loader():
 
         self.tileset = TileSet(path, [tw, th], 0, 0, scale)
 
-    def load_layer(self, layer: ET.Element):
+    def load_layer(self, layer: ET.Element) -> TileMap:
         data = layer[0]
         if data.tag != 'data':
             raise Exception("Invalid layer data")
@@ -79,7 +79,7 @@ class Loader():
         else:
             raise Exception("Invalid encoding:", encoding)
 
-    def load_objects(self, objects):
+    def load_objects(self, objects: ET.Element, last=False):
         data = objects[0]
         if data.tag != 'data':
             raise Exception("Invalid layer data")
@@ -89,9 +89,6 @@ class Loader():
         if encoding == "csv":
             sio = StringIO(data.text.strip().replace(',\n', '\n'))
             matrix = np.array(list(csv.reader(sio)), dtype=int)
-
-            self.moveables = []
-            self.interactables = {}
 
             is_wall = self.collision.data != -1
 
@@ -141,16 +138,17 @@ class Loader():
                 elif inter is not None:
                     self.interactables[ix, iy] = inter
 
-            if self.player is None:
-                raise Exception("No player found")
-            if self.weight is None:
-                raise Exception("No weight found")
-            self.player.weight = self.weight
+            if last:
+                if self.player is None:
+                    raise Exception("No player found")
+                if self.weight is None:
+                    raise Exception("No weight found")
+                self.player.weight = self.weight
         else:
             raise Exception("Invalid encoding:", encoding)
 
     def load_level(self, name):
-        print(name)
+        print(os.path.split(name)[-1])
         tree = ET.parse(name)
 
         root = tree.getroot()
@@ -165,13 +163,26 @@ class Loader():
         tw, th = int(root.attrib["tilewidth"]), int(root.attrib["tileheight"])
         w, h = int(root.attrib["width"]), int(root.attrib["height"])
         sx, sy = self.screen_size[0] / (tw * w), self.screen_size[1] / (th * h)
-        self.load_tileset(tileset_el.attrib["source"], tw, th, min(sx, sy))
+        self.load_tileset(os.path.dirname(
+            name), tileset_el.attrib["source"], tw, th, min(sx, sy))
 
         self.collision = self.load_layer(root[1])
 
-        self.decorations = [self.load_layer(r) for r in root[2:-1]]
+        self.moveables = []
+        self.interactables = {}
 
-        self.objects = self.load_objects(root[-1])
+        self.decorations = []
+
+        for layer in root[2:-1]:
+            if layer.attrib["name"][:3].lower() == "obj":
+                self.load_objects(layer)
+            else:
+                self.decorations.append(
+                    self.load_layer(layer)
+                )
+
+        self.load_objects(root[-1], True)
+        
 
         # build level object
 
