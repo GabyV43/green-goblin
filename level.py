@@ -242,12 +242,18 @@ class Level:
                 surface.blit(warn, (0,0))
             if self.click_z != 0 and self.click_r != 0:
                 self.stop_message = True
-        else:
-            if self.name == "intfinalbox.tmx":
-                warn = pygame.image.load("images/message.png")
-                surface.blit(warn, (0,0))
-                if len(self.history) >= 10:
-                    self.stop_message = True
+
+        if self.name == "tutorial1.tmx":
+            warn2 = pygame.image.load("images/message2.png")
+            surface.blit(warn2, (0,0))
+            if len(self.history) >= 3:
+                self.stop_message = True
+
+        elif self.name == "intfinalbox.tmx":
+            warn = pygame.image.load("images/message.png")
+            surface.blit(warn, (0,0))
+            if len(self.history) >= 10:
+                self.stop_message = True
 
 
 

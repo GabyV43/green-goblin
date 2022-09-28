@@ -10,6 +10,7 @@ class Slime(Interactable):
         super().__init__(x, y, tileset, index)
         self.active = active
 
+
     def interact(self, obj):
         if not self.active:
             obj.unlock()
@@ -18,8 +19,8 @@ class Slime(Interactable):
             slimew_sound = mixer.Sound("sounds_effects/slime.mp3")
             slimew_sound.set_volume(0.2)
             slimew_sound.play()
-
             obj.lock()
+
 
     def render(self, surface, offset=(0, 0)):
         if not self.active:

@@ -4,6 +4,7 @@ from event import Event
 
 from objects.weight import Weight
 
+
 class HeavyButton(Interactable):
     def __init__(self, x, y, tileset):
         super().__init__(x, y, tileset, 263)
