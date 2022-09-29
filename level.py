@@ -6,6 +6,7 @@ import pygame
 from pygame import Surface
 from pygame.locals import *
 from event import Event
+from objects.player import Player
 from objects.weight import Weight
 from interactables.slime import Slime
 import time
@@ -15,6 +16,8 @@ from math import ceil
 
 
 class Level:
+    player: Player
+
     def __init__(self, tileset: TileSet, player, moveables, interactables, decorations, collision, loader, name):
         self.tileset = tileset
         self.player = player
@@ -42,7 +45,6 @@ class Level:
         self.message_shown = False
         self.click_r = 0
         self.click_z = 0
-
 
     def render(self, surface: Surface):
         w = int(surface.get_width() // self.tileset.scale // 4)
@@ -76,9 +78,7 @@ class Level:
             if time.time() - self.complete > 0.5:
                 self.loader.load_next_level()
 
-
-
-    def update(self, event):
+    def update(self, event: pygame.event.Event):
         if self.complete is not None:
             return
 
@@ -89,6 +89,7 @@ class Level:
         )
 
         updated = self.player.update(event)
+        print("updated:", updated)
         if event.type == KEYDOWN:
             if event.key == K_r:
                 self.click_r += 1
@@ -100,6 +101,14 @@ class Level:
             elif event.key == K_z:
                 self.click_z += 1
                 self.undo()
+        elif event.type == JOYBUTTONDOWN:
+            if event.button == 1:  # B button
+                print("UNDO")
+                self.click_z += 1
+                self.undo()
+            elif event.button == 3:  # Y button
+                self.click_r += 1
+                self.reload()
 
         if not updated:
             return
@@ -220,7 +229,6 @@ class Level:
 
         print(self.history)
 
-
     def load_general_state(self, state):
         self.load_state(state[0])
 
@@ -230,7 +238,6 @@ class Level:
         for i, s in zip(self.interactables.values(), state[2]):
             i.load_state(s)
 
-
     def appear_screen(self, surface):
         if self.stop_message == True:
             return
@@ -239,21 +246,18 @@ class Level:
             if self.message_shown or self.player.weight.x == 4 and self.player.weight.y == 8:
                 self.message_shown = True
                 warn = pygame.image.load("images/message.png")
-                surface.blit(warn, (0,0))
+                surface.blit(warn, (0, 0))
             if self.click_z != 0 and self.click_r != 0:
                 self.stop_message = True
 
         if self.name == "tutorial1.tmx":
             warn2 = pygame.image.load("images/message2.png")
-            surface.blit(warn2, (0,0))
+            surface.blit(warn2, (0, 0))
             if len(self.history) >= 3:
                 self.stop_message = True
 
         elif self.name == "intfinalbox.tmx":
             warn = pygame.image.load("images/message.png")
-            surface.blit(warn, (0,0))
+            surface.blit(warn, (0, 0))
             if len(self.history) >= 10:
                 self.stop_message = True
-
-
-

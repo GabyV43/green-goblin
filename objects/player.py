@@ -12,6 +12,8 @@ class Player(Moveable):
         self.dead = False
         self.frozen = False
         self.weight_dead = False
+        self.old_dx = 0
+        self.old_dy = 0
 
     def move(self, dx, dy):
         if self.frozen:
@@ -76,6 +78,16 @@ class Player(Moveable):
                 return self.move(-1, 0)
             elif k == K_d or k == K_RIGHT:
                 return self.move(1, 0)
+        elif event.type == JOYHATMOTION:
+            (dx, dy) = event.value
+            if self.old_dx != dx:
+                self.old_dx = dx
+                if dx != 0:
+                    return self.move(dx, 0)
+            elif self.old_dy != dy:
+                self.old_dy = dy
+                if dy != 0:
+                    return self.move(0, -dy)
 
     def render(self, surface, offset=(0, 0)):
         if self.dead:

@@ -1,5 +1,5 @@
 from operator import contains
-from typing import Tuple
+from typing import List, Tuple
 import pygame
 from pygame.locals import *
 from book import Book
@@ -9,7 +9,18 @@ from pygame import mixer
 
 
 class Game:
+    state: str
+    book: Book
+    size: Tuple[int, int]
+    loader: Loader
+    info: pygame.display.Info
+    running: bool
+    screen: pygame.Surface
+    joysticks: List[pygame.joystick.Joystick]
+
     def __init__(self, size: Tuple[int, int], loader: Loader, book: Book, state: str):
+        self.joysticks = [pygame.joystick.Joystick(i)
+                          for i in range(pygame.joystick.get_count())]
         info = pygame.display.Info()  # You have to call this before pygame.display.set_mode()
         screen_width, screen_height = info.current_w, info.current_h
         size = (screen_width-10, screen_height-100)
@@ -47,7 +58,16 @@ class Game:
                             self.state = "menu"
                         else:
                             self.running = False
-                self.loader.level.update(event)
+                elif event.type == JOYDEVICEADDED or event.type == JOYDEVICEREMOVED:
+                    pygame.joystick.init()
+                    self.joysticks = [pygame.joystick.Joystick(i)
+                                      for i in range(pygame.joystick.get_count())]
+
+                if self.state == "game":
+                    self.loader.level.update(event)
+                elif self.state == "menu":
+                    pass  # TODO update Book so we can select level with keyboard/controller
+
             # if self.state == "video":
             #     cutscene = moviepy.editor.VideoFileClip("video/opendoor_new.mp4")
             #     curscene.preview()
@@ -119,6 +139,7 @@ level_list = [
     "maps/fases_gaby/ECM.tmx",
     "maps/fases_gaby/ECM2.tmx",
     "maps/fases_mark/box_hard.tmx",
+    "maps/fases_mark/box_medium.tmx",
 ]
 
 WIDTH, HEIGHT = 800, 600
