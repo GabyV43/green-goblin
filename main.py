@@ -45,6 +45,8 @@ class Game:
             # Replace with background image
             self.screen.fill((51, 60, 64))
 
+            updated = False
+
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.running = False
@@ -64,9 +66,13 @@ class Game:
                                       for i in range(pygame.joystick.get_count())]
 
                 if self.state == "game":
+                    updated = True
                     self.loader.level.update(event)
                 elif self.state == "menu":
                     pass  # TODO update Book so we can select level with keyboard/controller
+            
+            if not updated:
+                self.loader.level.update(None)
 
             # if self.state == "video":
             #     cutscene = moviepy.editor.VideoFileClip("video/opendoor_new.mp4")

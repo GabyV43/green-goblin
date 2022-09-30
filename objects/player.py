@@ -3,6 +3,11 @@ from objects.moveable import Moveable
 from pygame import mixer
 import pygame
 import math
+from pygame.time import get_ticks
+
+
+INITIAL_DELAY = 300
+AFTER_DELAY = 100
 
 
 class Player(Moveable):
@@ -14,6 +19,9 @@ class Player(Moveable):
         self.weight_dead = False
         self.old_dx = 0
         self.old_dy = 0
+        self.held_time = -1
+        self.held_button = -1
+        self.held_repeat = 0
 
     def move(self, dx, dy):
         if self.frozen:
@@ -68,16 +76,54 @@ class Player(Moveable):
     def update(self, event):
         if self.dead:
             return False
-        if event.type == KEYDOWN:
+        if event is None:
+            if self.held_button != -1:
+                t = get_ticks() - self.held_time
+                if t > INITIAL_DELAY:
+                    t -= INITIAL_DELAY
+                    t //= AFTER_DELAY
+                    if t + 1 > self.held_repeat:
+                        self.held_repeat += 1
+                        if self.held_button == 0:
+                            return self.move(0, -1)
+                        elif self.held_button == 1:
+                            return self.move(0, 1)
+                        elif self.held_button == 2:
+                            return self.move(-1, 0)
+                        elif self.held_button == 3:
+                            return self.move(1, 0)
+        elif event.type == KEYDOWN:
             k = event.key
             if k == K_w or k == K_UP:
+                self.held_button = 0
+                self.held_time = get_ticks()
                 return self.move(0, -1)
             elif k == K_s or k == K_DOWN:
+                self.held_button = 1
+                self.held_time = get_ticks()
                 return self.move(0, 1)
             elif k == K_a or k == K_LEFT:
+                self.held_button = 2
+                self.held_time = get_ticks()
                 return self.move(-1, 0)
             elif k == K_d or k == K_RIGHT:
+                self.held_button = 3
+                self.held_time = get_ticks()
                 return self.move(1, 0)
+        elif event.type == KEYUP:
+            k = event.key
+            if (k == K_w or k == K_UP) and self.held_button == 0:
+                self.held_button = -1
+                self.held_repeat = 0
+            elif (k == K_s or k == K_DOWN) and self.held_button == 1:
+                self.held_button = -1
+                self.held_repeat = 0
+            elif (k == K_a or k == K_LEFT) and self.held_button == 2:
+                self.held_button = -1
+                self.held_repeat = 0
+            elif (k == K_d or k == K_RIGHT) and self.held_button == 3:
+                self.held_button = -1
+                self.held_repeat = 0
         elif event.type == JOYHATMOTION:
             (dx, dy) = event.value
             if self.old_dx != dx:

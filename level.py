@@ -89,8 +89,10 @@ class Level:
         )
 
         updated = self.player.update(event)
-        print("updated:", updated)
-        if event.type == KEYDOWN:
+
+        if event is None:
+            pass
+        elif event.type == KEYDOWN:
             if event.key == K_r:
                 self.click_r += 1
                 self.reload()
