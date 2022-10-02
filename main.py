@@ -154,6 +154,9 @@ level_list = [
     "maps/fases_mark/box_hard.tmx",
     "maps/fases_mark/box_medium.tmx",
     "maps/fases_gaby/introS.tmx",
+    "maps/fases_mark/intro_caixa.tmx",
+    "maps/fases_mark/hard_test.tmx",
+    "maps/export.tmx",
 ]
 
 WIDTH, HEIGHT = 800, 600

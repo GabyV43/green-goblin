@@ -103,6 +103,8 @@ class Level:
             elif event.key == K_z:
                 self.click_z += 1
                 self.undo()
+            elif event.key == K_k:
+                self.loader.reload()
         elif event.type == JOYBUTTONDOWN:
             if event.button == 1:  # B button
                 print("UNDO")
