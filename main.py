@@ -70,7 +70,7 @@ class Game:
                     self.loader.level.update(event)
                 elif self.state == "menu":
                     pass  # TODO update Book so we can select level with keyboard/controller
-            
+
             if not updated:
                 self.loader.level.update(None)
 
@@ -146,6 +146,9 @@ level_list = [
     "maps/fases_gaby/ECM2.tmx",
     "maps/fases_mark/box_hard.tmx",
     "maps/fases_mark/box_medium.tmx",
+    "maps/fases_mark/intro_caixa.tmx",
+    "maps/fases_mark/hard_test.tmx",
+    "maps/export.tmx",
 ]
 
 WIDTH, HEIGHT = 800, 600
