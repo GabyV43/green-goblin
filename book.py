@@ -64,18 +64,18 @@ class Book():
         spacing_x = 5
         spacing_y = 4
         page_width = 74
+        half_lines = 2
 
         line = 0
         column = 0
         page = 0
         per_line = 4
         line_count = 4
-        half_lines = 2
 
         for i in range(len(level_list)):
             if line < half_lines and column == 0 and page == 0:
                 column = per_line // 2
-            x = start_x + (btn_size + spacing_x) * column + page_width * page
+            x = start_x + (btn_size + spacing_x) * column + page_width * (page % 2)
             y = start_y + (btn_size + spacing_y) * line
 
             valor = False

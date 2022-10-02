@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="9" height="9" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="2">
- <tileset firstgid="1" source="../tileset/Tileset_Oficial_V2.tsx"/>
+ <tileset firstgid="1" source="../../tileset/Tileset_Oficial_V2.tsx"/>
  <layer id="1" name="collision" width="9" height="9">
   <data encoding="csv">
 53,372,56,370,56,56,56,491,312,
 111,0,0,0,0,0,0,223,312,
-140,0,0,254,318,318,318,600,491,
+140,0,0,251,318,318,318,600,491,
 111,0,0,0,0,0,0,0,115,
 338,0,0,0,0,0,375,0,115,
 367,318,368,0,0,0,260,0,86,
-82,0,0,0,0,0,0,0,144,
+82,0,0,0,0,0,0,0,281,
 140,0,0,0,0,0,0,0,86,
-637,170,172,540,278,405,170,405,173
+637,170,172,540,278,405,170,403,173
 </data>
  </layer>
  <layer id="4" name="dec1" width="9" height="9">
@@ -43,8 +43,8 @@
  <layer id="3" name="objects" width="9" height="9">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,524,0,0,
-0,267,268,0,0,0,0,0,0,
+0,0,263,0,0,0,524,0,0,
+0,471,472,0,0,0,0,0,0,
 0,0,0,0,0,0,209,263,0,
 0,0,0,0,0,0,0,0,0,
 0,0,0,471,472,473,0,0,0,
