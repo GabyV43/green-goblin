@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="13" height="8" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="1">
+<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="13" height="8" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="1">
  <tileset firstgid="1" source="../../tileset/Tileset_Oficial_V2.tsx"/>
  <layer id="3" name="Tile Layer 3" width="13" height="8">
   <data encoding="csv">
@@ -13,6 +13,18 @@
 463,172,405,403,170,404,172,172,172,172,172,171,173
 </data>
  </layer>
+ <layer id="4" name="dec" width="13" height="8">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,591,592,593,594,0,0,0,0,
+0,0,0,0,0,620,621,622,623,0,0,0,0
+</data>
+ </layer>
  <layer id="2" name="Tile Layer 2" width="13" height="8">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -21,7 +33,7 @@
 0,0,0,0,205,379,0,0,0,0,0,0,0,
 0,0,0,0,209,0,0,0,0,205,0,0,0,
 0,0,0,0,209,0,0,0,0,0,0,0,0,
-0,0,0,0,209,0,0,209,0,205,205,554,0,
+0,0,0,263,209,0,563,564,565,205,205,554,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>

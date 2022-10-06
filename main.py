@@ -132,7 +132,14 @@ level_list = [
     "maps/fogo1.tmx",
     "maps/level2.5.tmx",
     # 1~2 fases de slime
-    "maps/level3.tmx",  # intro slime
+    "maps/intro_slime/fase1.tmx",
+    "maps/intro_slime/fase2.tmx",
+    "maps/level3.tmx",
+    "maps/intro_slime/fase3.tmx",
+    "maps/intro_slime/fase4.tmx", # intro slime
+    "maps/intro_slime/fase5.tmx",
+    "maps/intro_slime/fase5_challenge.tmx",
+    "maps/fases_mark/slime_nova.tmx",
     "maps/wood1.tmx",
     "maps/intromad.tmx",
     "maps/level5.tmx",
@@ -146,6 +153,7 @@ level_list = [
     "maps/fases_gaby/ECM2.tmx",
     "maps/fases_mark/box_hard.tmx",
     "maps/fases_mark/box_medium.tmx",
+    "maps/fases_gaby/introS.tmx",
     "maps/fases_mark/intro_caixa.tmx",
     "maps/fases_mark/hard_test.tmx",
     "maps/export.tmx",
