@@ -41,12 +41,13 @@ SLIME_IN_IDS = [266, 267, 268, 323, 352, 381, 325, 354, 383, 358, 359, 360]
 
 
 class Loader():
-    def __init__(self, level_list, screen_size, current_level=0):
+    def __init__(self, level_list, screen_size, on_all_finished_handler=None, current_level=0):
         self.tileset = None
         self.screen_size = screen_size
         self.level_list = level_list
         self.current_level = current_level
         self.load_level(level_list[current_level])
+        self.on_all_finished_handler = on_all_finished_handler
 
     def load_tileset(self, level_path, file, tw, th, scale):
         if self.tileset is not None and self.tileset.file == file:
@@ -182,7 +183,6 @@ class Loader():
                 )
 
         self.load_objects(root[-1], True)
-        
 
         # build level object
 
@@ -211,7 +211,10 @@ class Loader():
 
     def load_next_level(self):
         self.current_level += 1
-        self.reload()
+        if self.current_level >= len(self.level_list):
+            self.on_all_finished_handler()
+        else:
+            self.reload()
 
     def load_prev_level(self):
         self.current_level -= 1

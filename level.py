@@ -6,6 +6,7 @@ import pygame
 from pygame import Surface
 from pygame.locals import *
 from event import Event
+from objects.box import Box
 from objects.player import Player
 from objects.weight import Weight
 from interactables.slime import Slime
@@ -36,6 +37,19 @@ class Level:
                                 or type(t) is WeightEnd
                                 or type(t) is BoxEnd,
                                 (interactables[pos] for pos in interactables)))
+        for end in self.ends:
+            if type(end) is PlayerEnd:
+                if end.x == self.player.x and end.y == self.player.y:
+                    end.active = True
+            elif type(end) is WeightEnd:
+                if end.x == self.player.weight.x and end.y == self.player.weight.y:
+                    end.active = True
+            elif type(end) is BoxEnd:
+                for mov in self.moveables:
+                    if type(mov) is Box:
+                        if end.x == mov.x and end.y == mov.y:
+                            end.active = True
+                            break
         self.button_pressed = False
         self.history = []
 
@@ -124,11 +138,14 @@ class Level:
         for mov in self.moveables:
             pos = (mov.x, mov.y)
             if pos in self.interactables:
+                print("int")
                 event = self.interactables[pos].interact(mov)
                 if event is not None:
                     all_events.append(event)
             old_pos = (mov.old_x, mov.old_y)
             if old_pos in self.interactables:
+                ####################
+                print("unin")
                 event = self.interactables[old_pos].uninteract(mov)
                 if event is not None:
                     all_events.append(event)

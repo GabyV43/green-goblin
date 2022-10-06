@@ -21,9 +21,9 @@ class Game:
     def __init__(self, size: Tuple[int, int], loader: Loader, book: Book, state: str):
         self.joysticks = [pygame.joystick.Joystick(i)
                           for i in range(pygame.joystick.get_count())]
-        info = pygame.display.Info()  # You have to call this before pygame.display.set_mode()
-        screen_width, screen_height = info.current_w, info.current_h
-        size = (screen_width-10, screen_height-100)
+        # info = pygame.display.Info()  # You have to call this before pygame.display.set_mode()
+        # screen_width, screen_height = info.current_w, info.current_h
+        # size = (screen_width-10, screen_height-100)
         loader.resize_tileset(*size)
         book.resize(size)
 
@@ -149,24 +149,29 @@ level_list = [
     "maps/fases_mark/intro_caixa.tmx",
     "maps/fases_mark/hard_test.tmx",
     "maps/export.tmx",
+    "maps/teste.tmx",
+    "maps/fases_mark/box_new.tmx",
+    "maps/fases_mark/box_test.tmx"
 ]
 
-WIDTH, HEIGHT = 800, 600
+if __name__ == '__main__':
+    WIDTH, HEIGHT = 800, 600
 
-loader = Loader(level_list, (WIDTH, HEIGHT))
+    loader = Loader(level_list, (WIDTH, HEIGHT))
 
-pygame.init()
+    pygame.init()
 
-font = pygame.font.Font('./fonts/slkscr.ttf', 8)
+    font = pygame.font.Font('./fonts/slkscr.ttf', 8)
 
-try:
-    file = open("save.txt")
-    lvl_num = int(file.readlines()[0].strip())
-    file.close()
-except:
-    lvl_num = 0
+    try:
+        file = open("save.txt")
+        lvl_num = int(file.readlines()[0].strip())
+        file.close()
+    except:
+        lvl_num = 0
 
-book = Book("images/book.png", 10, (WIDTH, HEIGHT), level_list, lvl_num, font)
+    book = Book("images/book.png", 10, (WIDTH, HEIGHT),
+                level_list, lvl_num, font)
 
-game = Game((WIDTH, HEIGHT), loader, book, "menu")
-game.run()
+    game = Game((WIDTH, HEIGHT), loader, book, "menu")
+    game.run()

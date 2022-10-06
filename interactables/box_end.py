@@ -2,6 +2,7 @@ from interactable import Interactable
 from event import Event
 from objects.box import Box
 
+
 class BoxEnd(Interactable):
     def __init__(self, x, y, tileset):
         super().__init__(x, y, tileset, 553)
@@ -17,7 +18,7 @@ class BoxEnd(Interactable):
             self.active = False
             return Event.LEVEL_UNEND
 
-    def render(self, surface, offset=(0,0)):
+    def render(self, surface, offset=(0, 0)):
         if self.active:
             super().render(surface, 495, offset)
         else:

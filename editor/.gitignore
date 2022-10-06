@@ -1,0 +1,5 @@
+cache.pickle
+__pycache__/
+dist/
+build/
+*.spec

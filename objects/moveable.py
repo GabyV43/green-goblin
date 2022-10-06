@@ -4,8 +4,8 @@ class Moveable:
     def __init__(self, x, y, tileset, index, moveables, collision):
         self.x = x
         self.y = y
-        self.old_x = x
-        self.old_y = y
+        self.old_x = -1
+        self.old_y = -1
         self.tileset = tileset
         self.index = index
         self.moveables = moveables
@@ -34,7 +34,7 @@ class Moveable:
     def can_move_to(self, dx, dy):
         if self.locked:
             return
-        
+
         new_x = self.x + dx
         new_y = self.y + dy
 
@@ -50,7 +50,7 @@ class Moveable:
 
         return True
 
-    def render(self, surface, index = -1, offset = (0, 0)):
+    def render(self, surface, index=-1, offset=(0, 0)):
         if self.disappeared:
             return
         if index == - 1:
@@ -59,7 +59,8 @@ class Moveable:
         tw, th = self.tileset.size
 
         img = self.tileset.tiles[index]
-        surface.blit(img, (self.x * tw * scale + offset[0], self.y * th * scale + offset[1]))
+        surface.blit(img, (self.x * tw * scale +
+                     offset[0], self.y * th * scale + offset[1]))
 
     def die(self):
         self.dead = True
@@ -69,7 +70,7 @@ class Moveable:
 
     def lock(self):
         self.locked = True
-    
+
     def unlock(self):
         self.locked = False
 
