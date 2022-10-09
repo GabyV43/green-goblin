@@ -25,6 +25,22 @@ TILES = {
     "slimeInverted": {"type": "slime", "id": 266},
 }
 
+SOUNDS = {
+    "root": "sounds_effects/editor",
+    "set": [
+        "bloop1.ogg",
+        "bloop2.ogg",
+        "bloop3.ogg",
+        "bloop4.ogg",
+        "bloop5.ogg",
+        "bloop6.ogg",
+        "bloop7.ogg",
+        "bloop8.ogg",
+        "bloop9.ogg",
+        "bloop10.ogg",
+    ],
+}
+
 # It was designed for 3 columns
 # If you're changing that, please, care to change this too :)
 TILE_KEYS = [

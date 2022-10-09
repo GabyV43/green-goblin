@@ -174,7 +174,7 @@ class TileMap(Renderable, Scalable):
             self.shape[1] * self.tileset.tile_size[1] * scale
         ).inflate(4, 4)
 
-    def set_ground(self, pos: tuple[int, int], recurse: bool = True):
+    def set_ground(self, pos: tuple[int, int], sound: pygame.mixer.Sound | None = None, recurse: bool = True):
         if not (0 <= pos[0] < self.shape[0]) or not (0 <= pos[1] < self.shape[1]):
             return
         # Get neighbors configuration (1 byte)
@@ -192,7 +192,7 @@ class TileMap(Renderable, Scalable):
         id = self.wang_ground.get(code, 313)
         if code not in self.wang_ground:
             id = 313
-        self.set(pos, id)
+        self.set(pos, id, sound=sound)
 
         # Notify neighbors of the change
         if not recurse:
@@ -203,7 +203,7 @@ class TileMap(Renderable, Scalable):
             y = ord[1] + pos[1]
             if 0 <= x < self.shape[0] and 0 <= y < self.shape[1]:
                 if self.ground[x, y] != -1:
-                    self.set_ground((x, y), False)
+                    self.set_ground((x, y), recurse=False)
 
     def remove_ground(self, pos: tuple[int, int]):
         if not (0 <= pos[0] < self.shape[0]) or not (0 <= pos[1] < self.shape[1]):
@@ -218,9 +218,11 @@ class TileMap(Renderable, Scalable):
                 if self.get((x, y)) != -1:
                     self.set_ground((x, y), False)
 
-    def set(self, pos: tuple[int, int], val: int):
+    def set(self, pos: tuple[int, int], val: int, sound: pygame.mixer.Sound | None = None):
         if not (0 <= pos[0] < self.shape[0]) or not (0 <= pos[1] < self.shape[1]):
             return
+        if self.ground[pos[0], pos[1]] == -1 and sound is not None:
+            sound.play()
         self.ground[pos[0], pos[1]] = val
         if self.player == pos:
             self.player = None
@@ -236,7 +238,7 @@ class TileMap(Renderable, Scalable):
             return
         return self.ground[pos[0], pos[1]]
 
-    def set_player(self, pos: tuple[int, int]):
+    def set_player(self, pos: tuple[int, int], sound: pygame.mixer.Sound | None = None):
         if self.get(pos) != -1:
             return
         self.player = pos
@@ -250,7 +252,7 @@ class TileMap(Renderable, Scalable):
         if pos in self.movables:
             del self.movables[pos]
 
-    def set_movable(self, pos: tuple[int, int], id: int):
+    def set_movable(self, pos: tuple[int, int], id: int, sound: pygame.mixer.Sound | None = None):
         if self.get(pos) != -1:
             return
         self.movables[pos] = id
@@ -259,12 +261,12 @@ class TileMap(Renderable, Scalable):
         if self.weight == pos:
             self.weight = None
 
-    def set_interactable(self, pos: tuple[int, int], id: int):
+    def set_interactable(self, pos: tuple[int, int], id: int, sound: pygame.mixer.Sound | None = None):
         if self.get(pos) != -1:
             return
         self.interactables[pos] = id
 
-    def set_slime(self, pos: tuple[int, int], active: bool):
+    def set_slime(self, pos: tuple[int, int], active: bool, sound: pygame.mixer.Sound | None = None):
         if self.get(pos) != -1:
             return
         # TODO make slimes intelligent

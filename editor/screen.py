@@ -1,5 +1,8 @@
+import os
+import random
 import numpy
 import pygame
+from editor.tiles import SOUNDS, TILES
 
 from loader import Loader
 from .bar import Bar
@@ -19,6 +22,7 @@ class Screen(Renderable, EventHandler, Scalable):
     bar: Bar
     screen_size: tuple[int, int]
     loader: Loader | None
+    set_sounds: list[pygame.mixer.Sound]
 
     def __init__(self, screen_size: tuple[int, int], bar_columns: int) -> None:
         pygame.display.set_caption('Green Goblin Editor - New file')
@@ -36,6 +40,11 @@ class Screen(Renderable, EventHandler, Scalable):
         self.tilemap = TileMap(self.tileset, matrix, self)
         self.bar = Bar(self.tileset, bar_columns, screen_size, self.tilemap)
         self.drag = -1
+        root = SOUNDS["root"]
+        self.set_sounds = [
+            pygame.mixer.Sound(os.path.join(root, file))
+            for file in SOUNDS["set"]
+        ]
 
     def handle_event(self, event: pygame.event.Event):
         if self.loader is not None:
@@ -77,18 +86,21 @@ class Screen(Renderable, EventHandler, Scalable):
             return
         tile = self.bar.selected_tile()
         type = tile["type"]
+        sound = random.choice(self.set_sounds)
         if type == "ground":
-            self.tilemap.set_ground(self.tile_mouse_pos)
+            self.tilemap.set_ground(self.tile_mouse_pos, sound)
         elif type == "player":
-            self.tilemap.set_player(self.tile_mouse_pos)
+            self.tilemap.set_player(self.tile_mouse_pos, sound)
         elif type == "weight":
-            self.tilemap.set_weight(self.tile_mouse_pos)
+            self.tilemap.set_weight(self.tile_mouse_pos, sound)
         elif type == "movable":
-            self.tilemap.set_movable(self.tile_mouse_pos, tile["id"])
+            self.tilemap.set_movable(self.tile_mouse_pos, tile["id"], sound)
         elif type == "interactable":
-            self.tilemap.set_interactable(self.tile_mouse_pos, tile["id"])
+            self.tilemap.set_interactable(
+                self.tile_mouse_pos, tile["id"], sound)
         elif type == "slime":
-            self.tilemap.set_slime(self.tile_mouse_pos, tile["id"] == 527)
+            self.tilemap.set_slime(self.tile_mouse_pos,
+                                   tile["id"] == 527, sound)
 
     def handle_remove(self):
         pos = self.tile_mouse_pos

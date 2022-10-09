@@ -138,14 +138,11 @@ class Level:
         for mov in self.moveables:
             pos = (mov.x, mov.y)
             if pos in self.interactables:
-                print("int")
                 event = self.interactables[pos].interact(mov)
                 if event is not None:
                     all_events.append(event)
             old_pos = (mov.old_x, mov.old_y)
             if old_pos in self.interactables:
-                ####################
-                print("unin")
                 event = self.interactables[old_pos].uninteract(mov)
                 if event is not None:
                     all_events.append(event)
