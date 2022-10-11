@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf8'?>
-<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="11" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="1"><tileset firstgid="1" source="..\tileset\Tileset_Oficial_V2.tsx" /><layer id="1" name="collision" width="11" height="10"><data encoding="csv">492,372,372,372,372,372,371,372,372,372,491
+<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="11" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="1"><tileset firstgid="1" source="..\..\tileset\Tileset_Oficial_V2.tsx" /><layer id="1" name="collision" width="11" height="10"><data encoding="csv">492,372,372,372,372,372,371,372,372,372,491
 396,0,0,0,0,0,316,0,0,0,281
 396,0,314,0,375,0,450,318,546,0,281
 396,0,0,0,316,0,316,0,316,0,281
