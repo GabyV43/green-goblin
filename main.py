@@ -64,6 +64,8 @@ class Game:
                             self.state = "menu"
                         else:
                             self.running = False
+                    if event.key == K_m:
+                        self.book.book_page += 1
                 elif event.type == JOYDEVICEADDED or event.type == JOYDEVICEREMOVED:
                     pygame.joystick.init()
                     self.joysticks = [pygame.joystick.Joystick(i)
@@ -88,7 +90,7 @@ class Game:
                 mousex, mousey = pygame.mouse.get_pos()
 
                 for button in self.book.buttons:
-                    button.render(self.screen)
+                    button.render(self.screen, self.book.book_page)
                     if pygame.mouse.get_pressed()[0]:
                         if button.contains(mousex, mousey):
                             if button.on:
@@ -163,7 +165,8 @@ level_list = [
     "maps/export.tmx",
     "maps/teste.tmx",
     "maps/fases_mark/box_new.tmx",
-    "maps/fases_mark/box_test.tmx"
+    "maps/fases_mark/box_test.tmx",
+    "maps/fases_mark/all_n10.tmx",
 ]
 
 if __name__ == '__main__':
