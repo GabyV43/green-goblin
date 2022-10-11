@@ -55,9 +55,9 @@ class Player(Moveable):
             is_right_dir = self.x + dx == self.weight.x or self.y + dy == self.weight.y
 
             if is_pulling_weight and not is_right_dir:
-                chain_sound = mixer.Sound("sounds_effects/chain.mp3")
-                # feet_sound.set_volume(0.2)
-                chain_sound.play()
+                # chain_sound = mixer.Sound("sounds_effects/chain.mp3")
+                # # feet_sound.set_volume(0.2)
+                # chain_sound.play()
                 return False
 
             if is_pulling_weight and not self.weight.can_move_to(dx, dy):
@@ -67,9 +67,9 @@ class Player(Moveable):
             if is_pulling_weight:
                 self.weight.push(dx, dy)
 
-        feet_sound = mixer.Sound("sounds_effects/walking.mp3")
-        feet_sound.set_volume(0.4)
-        feet_sound.play()
+        # feet_sound = mixer.Sound("sounds_effects/walking.mp3")
+        # feet_sound.set_volume(0.4)
+        # feet_sound.play()
 
         return True
 
@@ -184,8 +184,8 @@ class Player(Moveable):
         surface.blit(rotated_chain, new_rect)
 
     def die(self):
-        die_sound = mixer.Sound("sounds_effects/gameover.mp3")
-        die_sound.play()
+        # die_sound = mixer.Sound("sounds_effects/gameover.mp3")
+        # die_sound.play()
         super().die()
 
     def weight_die(self):
@@ -198,17 +198,17 @@ class Player(Moveable):
         if not self.frozen:
             self.frozen = True
             self.weight.freeze()
-            freeze_sound = mixer.Sound("sounds_effects/freeze.mp3")
-        # freeze_sound.set_volume(0.3)
-            freeze_sound.play()
+            # freeze_sound = mixer.Sound("sounds_effects/freeze.mp3")
+            # # freeze_sound.set_volume(0.3)
+            # freeze_sound.play()
 
     def unfreeze(self):
         if self.frozen:
             self.frozen = False
             self.weight.unfreeze()
-            unfreeze_sound = mixer.Sound("sounds_effects/unfreeze.mp3")
-            # unfreeze_sound.set_volume(0.3)
-            unfreeze_sound.play()
+            # unfreeze_sound = mixer.Sound("sounds_effects/unfreeze.mp3")
+            # # unfreeze_sound.set_volume(0.3)
+            # unfreeze_sound.play()
 
     def get_state(self):
         return (

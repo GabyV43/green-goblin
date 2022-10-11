@@ -86,9 +86,9 @@ class Level:
 
         if self.complete is not None:
             self.level_completed = True
-            win_sound = mixer.Sound("sounds_effects/win.mp3")
-            win_sound.set_volume(0.15)
-            win_sound.play()
+            # win_sound = mixer.Sound("sounds_effects/win.mp3")
+            # win_sound.set_volume(0.15)
+            # win_sound.play()
             if time.time() - self.complete > 0.5:
                 self.loader.load_next_level()
 
@@ -169,14 +169,14 @@ class Level:
             self.player.die()
         elif event == Event.WEIGHT_DIE:
             self.player.weight_die()
-            fall_sound = mixer.Sound("sounds_effects/girlfall.mp3")
-            # fall_sound.set_volume(0.3)
-            fall_sound.play()
+            # fall_sound = mixer.Sound("sounds_effects/girlfall.mp3")
+            # # fall_sound.set_volume(0.3)
+            # fall_sound.play()
         elif event == Event.BUTTON_PRESS:
             if not self.button_pressed:
-                button_sound = mixer.Sound("sounds_effects/button_press.mp3")
-                # button_sound.set_volume(0.5)
-                button_sound.play()
+                # button_sound = mixer.Sound("sounds_effects/button_press.mp3")
+                # # button_sound.set_volume(0.5)
+                # button_sound.play()
                 for pos in self.interactables:
                     inter = self.interactables[pos]
                     if type(inter) is Slime:

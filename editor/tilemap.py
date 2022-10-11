@@ -245,7 +245,7 @@ class TileMap(Renderable, Scalable):
         if pos in self.movables:
             del self.movables[pos]
 
-    def set_weight(self, pos: tuple[int, int]):
+    def set_weight(self, pos: tuple[int, int], sound: pygame.mixer.Sound | None = None):
         if self.get(pos) != -1:
             return
         self.weight = pos

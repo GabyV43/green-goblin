@@ -1,4 +1,5 @@
 from operator import contains
+import os
 from typing import List, Tuple
 import pygame
 from pygame.locals import *
@@ -35,8 +36,11 @@ class Game:
 
     def run(self):
         clock = pygame.time.Clock()
-        back_sound = mixer.Sound("sounds_effects/cave.mp3")
-        back_sound.set_volume(0.3)
+        # p = os.path.join('sounds_effects', 'cave.ogg')
+        # print(os.path.exists(p))
+        # back_sound = mixer.Sound(p)
+        # back_sound.set_volume(0.3)
+        # tem que fazer isso pra todas as partes do código ontem tem som, até a gente resolverok
         # back_sound.play(loops=1000)
 
         while self.running:

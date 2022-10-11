@@ -42,7 +42,7 @@ class Screen(Renderable, EventHandler, Scalable):
         self.drag = -1
         root = SOUNDS["root"]
         self.set_sounds = [
-            pygame.mixer.Sound(os.path.join(root, file))
+            None #pygame.mixer.Sound(os.path.join(root, file))
             for file in SOUNDS["set"]
         ]
 
