@@ -181,6 +181,7 @@ level_list = [
     "maps/fases_mark/box_new.tmx",
     "maps/fases_mark/box_test.tmx",
     "maps/fases_mark/all_n10.tmx",
+    "maps/fases_mark/hard11.tmx",
 ]
 
 if __name__ == '__main__':
