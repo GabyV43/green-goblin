@@ -1,13 +1,13 @@
-from operator import contains
-import os
 from typing import List, Tuple
+
 import pygame
 from pygame.locals import *
-from book import Book
-from button_menu import ButtonMenu
-from loader import Loader
-from pygame import mixer
 
+from book import Book
+from loader import Loader
+
+from editor.screen import Screen as Editor
+from editor import cache
 
 class Game:
     state: str
@@ -18,6 +18,7 @@ class Game:
     running: bool
     screen: pygame.Surface
     joysticks: List[pygame.joystick.Joystick]
+    editor: Editor
 
     def __init__(self, size: Tuple[int, int], loader: Loader, book: Book, state: str):
         self.joysticks = [pygame.joystick.Joystick(i)
@@ -33,6 +34,8 @@ class Game:
         self.running = True
         self.state = state
         self.book = book
+        cache.load_cache()
+        self.editor = Editor(self.screen.get_rect().size, 3)
 
     def run(self):
         clock = pygame.time.Clock()
@@ -60,10 +63,12 @@ class Game:
                     self.book.resize((width, height))
                 elif event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
-                        if self.state == "game":
+                        if self.state == "game" or self.state == "editor":
                             self.state = "menu"
                         else:
                             self.running = False
+                    elif event.key == K_e:
+                        self.state = "editor"
                 elif event.type == JOYDEVICEADDED or event.type == JOYDEVICEREMOVED:
                     pygame.joystick.init()
                     self.joysticks = [pygame.joystick.Joystick(i)
@@ -72,6 +77,8 @@ class Game:
                 if self.state == "game":
                     updated = True
                     self.loader.level.update(event)
+                elif self.state == "editor":
+                    self.editor.handle_event(event)
                 elif self.state == "menu":
                     pass  # TODO update Book so we can select level with keyboard/controller
 
@@ -107,6 +114,9 @@ class Game:
 
                 if self.loader.level.level_completed:
                     self.book.set_level(self.loader.current_level + 1)
+
+            elif self.state == "editor":
+                self.editor.render(self.screen)
 
             pygame.display.flip()
 
