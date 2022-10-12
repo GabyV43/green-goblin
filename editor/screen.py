@@ -22,7 +22,7 @@ class Screen(Renderable, EventHandler, Scalable):
     bar: Bar
     screen_size: tuple[int, int]
     loader: Loader | None
-    set_sounds: list[pygame.mixer.Sound]
+    set_sounds: list[pygame.mixer.Sound | None]
 
     def __init__(self, screen_size: tuple[int, int], bar_columns: int) -> None:
         pygame.display.set_caption('Green Goblin Editor - New file')
@@ -42,7 +42,7 @@ class Screen(Renderable, EventHandler, Scalable):
         self.drag = -1
         root = SOUNDS["root"]
         self.set_sounds = [
-            None #pygame.mixer.Sound(os.path.join(root, file))
+            None # pygame.mixer.Sound(os.path.join(root, file))
             for file in SOUNDS["set"]
         ]
 
@@ -70,6 +70,8 @@ class Screen(Renderable, EventHandler, Scalable):
             if self.loader is None:
                 if event.key == pygame.K_ESCAPE:
                     self.bar.selected = -1
+                elif event.key == pygame.K_t:
+                    self.tilemap.test_level()
                 self.bar.handle_keydown(event.key)
             elif event.key == pygame.K_ESCAPE:
                 self.finish_test()

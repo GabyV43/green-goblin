@@ -3,7 +3,7 @@ import csv
 from loader import Loader
 from io import StringIO
 import os
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 import numpy
 import pygame
 from .scalable import Scalable
@@ -393,6 +393,7 @@ class TileMap(Renderable, Scalable):
         movab_data.attrib["encoding"] = "csv"
         movab_data.text = self._movables_to_csv()
 
+        ET.indent(map)
         return ET.tostring(map, encoding='utf8', method='xml')
 
     def from_xml(self, source: str):
@@ -564,6 +565,14 @@ class TileMap(Renderable, Scalable):
             pygame.display.set_caption(f'Green Goblin Editor - {filename}')
 
     def test_level(self):
+        # Check if there's a player and weight
+        if self.player is None:
+            messagebox.showerror("No Player found", "You must add a Player before testing your level")
+            return
+        elif self.weight is None:
+            messagebox.showerror("No Weight found", "You must add a Weight before testing your level")
+            return
+
         # First save the file
         lvl_name = os.path.normpath('./maps/tmp.tmx')
         self.saveas(lvl_name)

@@ -63,8 +63,11 @@ class Game:
                     self.book.resize((width, height))
                 elif event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
-                        if self.state == "game" or self.state == "editor":
+                        if self.state == "game":
                             self.state = "menu"
+                        elif self.state == "editor":
+                            if self.editor.loader == None:
+                                self.state = "menu"
                         else:
                             self.running = False
                     elif event.key == K_e:
