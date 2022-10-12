@@ -61,6 +61,7 @@ class Game:
                     width, height = pygame.display.get_surface().get_size()
                     self.loader.resize_tileset(width, height)
                     self.book.resize((width, height))
+                    self.editor.rescale(-1)
                 elif event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
                         if self.state == "game":
