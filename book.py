@@ -16,6 +16,8 @@ class Book():
         self.off_x = 0
         self.off_y = 0
 
+        self.book_page = 0
+
         self.resize(screen_size)
         self.generate_buttons(level_list, font)
 
@@ -52,7 +54,7 @@ class Book():
                      self.off_x, self.margin + self.off_y))
 
         for button in self.buttons:
-            button.render(surface)
+            button.render(surface, self.book_page)
 
     def generate_buttons(self, level_list, font):
         self.buttons = []
@@ -69,6 +71,7 @@ class Book():
         line = 0
         column = 0
         page = 0
+        book_page = 0
         per_line = 4
         line_count = 4
 
@@ -84,7 +87,7 @@ class Book():
                 valor = True
 
             btn = ButtonMenu(x, y, valor, i + 1, self.scale,
-                             self.margin + self.off_x, self.margin + self.off_y, font)
+                             self.margin + self.off_x, self.margin + self.off_y, font, book_page)
 
             self.buttons.append(btn)
 
@@ -95,6 +98,10 @@ class Book():
                 if line >= line_count:
                     line = 0
                     page += 1
+
+                    if page > 1:
+                        book_page += 1
+                        page = 0
 
     def set_level(self, final_level_complete):
         if final_level_complete < self.level_complete:
