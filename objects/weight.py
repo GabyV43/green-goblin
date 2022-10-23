@@ -1,9 +1,9 @@
-from objects.moveable import Moveable
+from objects.connection import Connected
 
-class Weight(Moveable):
+
+class Weight(Connected):
     def __init__(self, x, y, tileset, moveables, collision):
         super().__init__(x, y, tileset, 148, moveables, collision)
-        self.frozen = False
 
     def freeze(self):
         self.frozen = True
@@ -11,12 +11,11 @@ class Weight(Moveable):
     def unfreeze(self):
         self.frozen = False
 
-    def render(self, surface, offset = (0, 0)):
+    def render(self, surface, offset=(0, 0)):
         if self.frozen:
             super().render(surface, 149, offset)
         else:
             super().render(surface, offset=offset)
-
 
     def get_state(self):
         return (

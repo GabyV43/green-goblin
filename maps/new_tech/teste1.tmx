@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf8'?>
+<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="10" height="6" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="1">
+  <tileset firstgid="1" source="..\..\tileset\Tileset_Oficial_V2.tsx" />
+  <connections>
+    <conn from="5,2" to="4,4", distance="3"/>
+  </connections>
+  <layer id="1" name="collision" width="10" height="6">
+    <data encoding="csv">
+492,372,372,372,372,372,372,372,372,491
+396,0,0,0,0,0,0,0,0,281
+396,0,0,0,0,0,0,314,0,281
+396,0,0,0,0,314,0,0,0,281
+396,0,0,0,0,0,0,0,0,281
+463,405,405,405,405,405,405,405,405,462</data>
+  </layer>
+  <layer id="3" name="obj1" width="10" height="6">
+    <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0
+0,582,379,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,554,0
+0,409,0,0,0,0,0,0,0,0
+0,524,0,0,0,0,0,0,554,0
+0,0,0,0,0,0,0,0,0,0</data>
+  </layer>
+  <layer id="4" name="obj2" width="10" height="6">
+    <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0
+0,0,0,31,0,147,0,0,0,0
+0,0,0,149,0,0,0,0,0,0
+0,0,0,0,147,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0</data>
+  </layer>
+</map>

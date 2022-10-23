@@ -99,7 +99,7 @@ class Loader():
                 id = matrix[iy, ix] - 1
                 if id == PLAYER_ID:
                     self.player = obj = Player(
-                        self.tileset, ix, iy, self.moveables, is_wall, None)
+                        self.tileset, ix, iy, self.moveables, is_wall)
                 elif id == WEIGHT_ID:
                     self.weight = obj = Weight(
                         ix, iy, self.tileset, self.moveables, is_wall)
@@ -144,7 +144,9 @@ class Loader():
                     raise Exception("No player found")
                 if self.weight is None:
                     raise Exception("No weight found")
-                self.player.weight = self.weight
+
+                from objects.connection import Connected
+                Connected.interconnect(self.player, self.weight, 3)
         else:
             raise Exception("Invalid encoding:", encoding)
 
@@ -189,6 +191,7 @@ class Loader():
         self.level = Level(
             self.tileset,
             self.player,
+            self.weight,
             self.moveables,
             self.interactables,
             self.decorations,

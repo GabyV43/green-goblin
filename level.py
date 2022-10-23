@@ -19,9 +19,10 @@ from math import ceil
 class Level:
     player: Player
 
-    def __init__(self, tileset: TileSet, player, moveables, interactables, decorations, collision, loader, name):
+    def __init__(self, tileset: TileSet, player, weight, moveables, interactables, decorations, collision, loader, name):
         self.tileset = tileset
         self.player = player
+        self.weight  = weight
         self.moveables = moveables
         self.interactables = interactables
         self.decorations = decorations
@@ -42,7 +43,7 @@ class Level:
                 if end.x == self.player.x and end.y == self.player.y:
                     end.active = True
             elif type(end) is WeightEnd:
-                if end.x == self.player.weight.x and end.y == self.player.weight.y:
+                if end.x == self.weight.x and end.y == self.weight.y:
                     end.active = True
             elif type(end) is BoxEnd:
                 for mov in self.moveables:
