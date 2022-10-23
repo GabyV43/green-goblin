@@ -1,5 +1,6 @@
 import csv
 
+from typing import Any
 from loader import Loader
 from io import StringIO
 import os
@@ -41,13 +42,13 @@ class TileMap(Renderable, Scalable):
     shape: tuple[int, int]
     player: tuple[int, int] | None
     weight: tuple[int, int] | None
-    screen: any
-    border: pygame.Rect
+    screen: Any
+    border: pygame.rect.Rect
     # We call it wang_ground because we'll have wang_slime too
     wang_ground: dict[str, int]
     # wang_slime: dict[str, int]
 
-    def __init__(self, tileset: TileSet, matrix: numpy.ndarray, screen: any, init: bool = True, source: str | None = None):
+    def __init__(self, tileset: TileSet, matrix: numpy.ndarray, screen: Any, init: bool = True, source: str | None = None):
         self.source = source
         self.tileset = tileset
         self.ground = matrix
@@ -216,7 +217,7 @@ class TileMap(Renderable, Scalable):
             y = ord[1] + pos[1]
             if 0 <= x < self.shape[0] and 0 <= y < self.shape[1]:
                 if self.get((x, y)) != -1:
-                    self.set_ground((x, y), False)
+                    self.set_ground((x, y), recurse=False)
 
     def set(self, pos: tuple[int, int], val: int, sound: pygame.mixer.Sound | None = None):
         if not (0 <= pos[0] < self.shape[0]) or not (0 <= pos[1] < self.shape[1]):
@@ -233,7 +234,7 @@ class TileMap(Renderable, Scalable):
         if pos in self.movables:
             del self.movables[pos]
 
-    def get(self, pos: tuple[int, int]) -> int:
+    def get(self, pos: tuple[int, int]) -> int | None:
         if not (0 <= pos[0] < self.shape[0]) or not (0 <= pos[1] < self.shape[1]):
             return
         return self.ground[pos[0], pos[1]]
@@ -307,7 +308,8 @@ class TileMap(Renderable, Scalable):
             for x in range(self.shape[0]):
                 if x > 0:
                     csv += ','
-                csv += str(self.get((x, y)) + 1)
+                val = self.get((x, y)) or -1
+                csv += str(val + 1)
         return csv
 
     def _movables_to_csv(self) -> str:
@@ -422,7 +424,7 @@ class TileMap(Renderable, Scalable):
         assert data.tag == "data"
         assert data.attrib["encoding"] == "csv"
 
-        sio = StringIO(data.text.strip().replace(',\n', '\n'))
+        sio = StringIO((data.text or '').strip().replace(',\n', '\n'))
         return numpy.array(list(csv.reader(sio)), dtype=int).T - 1
 
     def load_objects(self, layer: ET.Element):
@@ -431,12 +433,10 @@ class TileMap(Renderable, Scalable):
 
         assert data.attrib["encoding"] == 'csv'
 
-        sio = StringIO(data.text.strip().replace(',\n', '\n'))
+        sio = StringIO((data.text or '').strip().replace(',\n', '\n'))
         matrix = numpy.array(list(csv.reader(sio)), dtype=int)
 
         for iy, ix in numpy.ndindex(matrix.shape):
-            obj = inter = None
-
             pos = (ix, iy)
             id = matrix[iy, ix] - 1
             if id in PLAYER_IDS:
@@ -455,11 +455,6 @@ class TileMap(Renderable, Scalable):
                 pass  # In this case there is nothing there
             else:
                 raise Exception(f"Unkown id {id}")
-
-            if obj is not None:
-                self.moveables.append(obj)
-            elif inter is not None:
-                self.interactables[ix, iy] = inter
 
     def resize(self, right: int, bottom: int, left: int, top: int):
         assert abs(right + bottom + left + top) == 1
@@ -501,7 +496,7 @@ class TileMap(Renderable, Scalable):
         ).inflate(4, 4)
 
     def _set_border(self):
-        y = 0
+        x = y = 0
         for x in range(1, self.shape[0]):
             self.set_ground((x, y))
         for y in range(1, self.shape[1]):
@@ -537,7 +532,7 @@ class TileMap(Renderable, Scalable):
         self._set_border()
 
     def save(self):
-        filename = self.source
+        filename = self.source or ''
         xml = self.to_xml(filename)
         with open(filename, 'w') as f:
             f.write(xml.decode())
@@ -567,10 +562,12 @@ class TileMap(Renderable, Scalable):
     def test_level(self):
         # Check if there's a player and weight
         if self.player is None:
-            messagebox.showerror("No Player found", "You must add a Player before testing your level")
+            messagebox.showerror(
+                "No Player found", "You must add a Player before testing your level")
             return
         elif self.weight is None:
-            messagebox.showerror("No Weight found", "You must add a Weight before testing your level")
+            messagebox.showerror(
+                "No Weight found", "You must add a Weight before testing your level")
             return
 
         # First save the file
