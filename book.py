@@ -90,7 +90,7 @@ class Book():
                              self.margin + self.off_x, self.margin + self.off_y, font, book_page)
 
             self.buttons.append(btn)
-
+            
             column += 1
             if column >= per_line:
                 column = 0

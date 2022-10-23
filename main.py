@@ -103,14 +103,14 @@ class Game:
                 for button in self.book.buttons:
                     button.render(self.screen, self.book.book_page)
                     if pygame.mouse.get_pressed()[0]:
-                        if button.contains(mousex, mousey):
+                        if button.contains(mousex, mousey, self.book.book_page):
                             if button.on:
                                 # print("on")
                                 self.loader.load_level_number(
                                     button.number - 1)
                                 self.state = "game"
                     if pygame.mouse.get_pressed()[1]:
-                        if button.contains(mousex, mousey):
+                        if button.contains(mousex, mousey, self.book.book_page):
                             self.loader.load_level_number(
                                 button.number - 1)
                             self.state = "game"
@@ -156,7 +156,7 @@ level_list = [
     "maps/intro_slime/fase2.tmx",
     "maps/level3.tmx",
     "maps/intro_slime/fase3.tmx",
-    "maps/intro_slime/fase4.tmx", # intro slime
+    #"maps/intro_slime/fase4.tmx", # intro slime
     "maps/intro_slime/fase5.tmx",
     "maps/intro_slime/fase5_challenge.tmx",
     "maps/fases_mark/slime_nova.tmx",

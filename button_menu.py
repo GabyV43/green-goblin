@@ -52,7 +52,9 @@ class ButtonMenu():
                 surface.blit(self.text_img_off_resized, (self.xredim + self.offsetx +
                             self.text_off_x_redim, self.offsety + self.yredim + self.text_off_y_redim))
 
-    def contains(self, x, y):
+    def contains(self, x, y, page):
+        if page != self.book_page:
+            return False
         if x >= self.xredim + self.offsetx and x <= self.xredim + self.width + self.offsetx:
             if y >= self.yredim + self.offsety and y <= self.yredim + self.height + self.offsety:
                 return True
