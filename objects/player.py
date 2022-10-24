@@ -135,15 +135,15 @@ class Player(Connected):
                 if dy != 0:
                     return self.move(0, -dy)
 
-    def render(self, surface, offset=(0, 0)):
+    def render(self, surface, index=-1, offset=(0, 0)):
         if self.dead:
-            super().render(surface, 59, offset)
+            if index == -1:
+                index = 59
+            super().render(surface, index, offset)
         elif self.frozen:
-            if not self.disappeared:
-                self.draw_chain(surface, offset)
-            super().render(surface, 60, offset)
+            if index == -1:
+                index = 60
+            super().render(surface, index, offset)
         else:
-            if not self.disappeared:
-                self.draw_chain(surface, offset)
-            super().render(surface, offset=offset)
+            super().render(surface, index, offset=offset)
 

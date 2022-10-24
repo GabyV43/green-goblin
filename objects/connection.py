@@ -124,6 +124,7 @@ class Connected(Moveable):
             # die_sound.play()
 
     def render(self, surface, index=-1, offset=(0, 0)):
+        print(self.obj_id, self.con_id)
         if self.obj_id == self.con_id:
             self.draw_chain(surface, offset)
         super().render(surface, index, offset)
@@ -143,7 +144,6 @@ class Connected(Moveable):
             count = math.ceil(dist_px / chain_width)
 
             angle = math.atan2(c.y - self.y, c.x - self.x)
-            print(dist, count, dist_px, math.degrees(angle))
 
             for i in range(count):
                 self.draw_single_chain_piece(
@@ -213,5 +213,3 @@ class Connected(Moveable):
 
         for c, _ in c1.cons + c2.cons:
             c.con_id = cid
-
-        print(c1, c2, dist)
