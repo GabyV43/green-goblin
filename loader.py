@@ -15,6 +15,7 @@ from interactables.weight_end import WeightEnd
 from interactables.wood import Wood
 from level import Level
 from objects.box import Box
+from objects.connection import Connected
 from tilemap import TileMap
 from tileset import TileSet
 
@@ -92,6 +93,7 @@ class Loader():
             matrix = np.array(list(csv.reader(sio)), dtype=int)
 
             is_wall = self.collision.data != -1
+            cid = 0
 
             for iy, ix in np.ndindex(matrix.shape):
                 obj = inter = None
@@ -99,12 +101,12 @@ class Loader():
                 id = matrix[iy, ix] - 1
                 if id == PLAYER_ID:
                     self.player = obj = Player(
-                        self.tileset, ix, iy, self.moveables, is_wall)
+                        self.tileset, ix, iy, self.moveables, is_wall, cid)
                 elif id == WEIGHT_ID:
                     self.weight = obj = Weight(
-                        ix, iy, self.tileset, self.moveables, is_wall)
+                        ix, iy, self.tileset, self.moveables, is_wall, cid)
                 elif id == BOX_ID:
-                    obj = Box(ix, iy, self.tileset, self.moveables, is_wall)
+                    obj = Box(ix, iy, self.tileset, self.moveables, is_wall, cid)
                 elif id == WOOD_ID:
                     inter = Wood(ix, iy, self.tileset)
                 elif id == SPIKE_ID:
@@ -136,6 +138,7 @@ class Loader():
 
                 if obj is not None:
                     self.moveables.append(obj)
+                    cid += 1
                 elif inter is not None:
                     self.interactables[ix, iy] = inter
 
@@ -169,14 +172,18 @@ class Loader():
         self.load_tileset(os.path.dirname(
             name), tileset_el.attrib["source"], tw, th, min(sx, sy))
 
-        self.collision = self.load_layer(root[1])
+        begin = 1
+        if root[1].tag == "connections":
+            begin = 2
+
+        self.collision = self.load_layer(root[begin])
 
         self.moveables = []
         self.interactables = {}
 
         self.decorations = []
 
-        for layer in root[2:-1]:
+        for layer in root[begin+1:-1]:
             if layer.attrib["name"][:3].lower() == "obj":
                 self.load_objects(layer)
             else:
@@ -185,6 +192,22 @@ class Loader():
                 )
 
         self.load_objects(root[-1], True)
+
+        if root[1].tag == "connections":
+            for conn in root[1]:
+                fx, fy = map(int, conn.attrib["from"].split(','))
+                tx, ty = map(int, conn.attrib["to"].split(','))
+                dist = int(conn.attrib["distance"])
+
+                from_obj = None
+                to_obj = None
+                for obj in self.moveables:
+                    if obj.x == fx and obj.y == fy:
+                        from_obj = obj
+                    elif obj.x == tx and obj.y == ty:
+                        to_obj = obj
+
+                Connected.interconnect(from_obj, to_obj, dist)
 
         # build level object
 

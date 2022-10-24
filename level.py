@@ -169,7 +169,7 @@ class Level:
         elif event == Event.PLAYER_DIE:
             self.player.die()
         elif event == Event.WEIGHT_DIE:
-            self.player.weight_die()
+            self.player.die()
             # fall_sound = mixer.Sound("sounds_effects/girlfall.mp3")
             # fall_sound.set_volume(0.3)
             # fall_sound.play()
@@ -191,9 +191,9 @@ class Level:
         elif event == Event.BUTTON_UNPRESS:
             self.button_pressed = False
         elif event == Event.FREEZE:
-            self.player.freeze()
+            ... # self.player.freeze()
         elif event == Event.UNFREEZE:
-            self.player.unfreeze()
+            ... # self.player.unfreeze()
 
     def resize_tileset(self, width, height):
         th, tw = self.collision.data.shape
@@ -262,7 +262,7 @@ class Level:
             return
 
         if self.name == "level2.tmx":
-            if self.message_shown or self.player.weight.x == 4 and self.player.weight.y == 8:
+            if self.message_shown or self.weight.x == 4 and self.weight.y == 8:
                 self.message_shown = True
                 warn = pygame.image.load("images/message.png")
                 surface.blit(warn, (0, 0))

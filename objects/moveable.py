@@ -16,9 +16,13 @@ class Moveable:
 
     def move(self, dx, dy):
         if self.can_move_to(dx, dy):
-            self.push(dx, dy)
+             return self.push(dx, dy)
+        return False
 
-    def push(self, dx, dy):
+    def push(self, dx, dy, ids: list[int] = None):
+        if ids is None:
+            ids = []
+
         self.old_x = self.x
         self.old_y = self.y
         self.x += dx
@@ -28,10 +32,15 @@ class Moveable:
             if box is self:
                 continue
             if box.x == self.x and box.y == self.y:
-                box.push(dx, dy)
+                box.push(dx, dy, ids)
                 break
 
-    def can_move_to(self, dx, dy):
+        return True
+
+    def can_move_to(self, dx, dy, ids: list[int] = None):
+        if ids is None:
+            ids = []
+
         if self.locked:
             return
 
@@ -45,7 +54,7 @@ class Moveable:
             if box is self:
                 continue
             if box.x == new_x and box.y == new_y:
-                if not box.can_move_to(dx, dy):
+                if not box.can_move_to(dx, dy, ids):
                     return False
 
         return True

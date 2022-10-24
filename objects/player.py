@@ -12,8 +12,8 @@ AFTER_DELAY = 100
 
 
 class Player(Connected):
-    def __init__(self, tileset, x, y, moveables, collision):
-        super().__init__(x, y, tileset, 30, moveables, collision)
+    def __init__(self, tileset, x, y, moveables, collision, uid: int):
+        super().__init__(x, y, tileset, 30, moveables, collision, uid)
         self.dead = False
         self.frozen = False
         self.weight_dead = False
@@ -147,8 +147,3 @@ class Player(Connected):
                 self.draw_chain(surface, offset)
             super().render(surface, offset=offset)
 
-    def weight_die(self):
-        self.weight_dead = True
-        self.lock()
-        self.disappear()
-        self.weight.disappear()

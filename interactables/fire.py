@@ -1,4 +1,5 @@
 from interactable import Interactable
+from objects.connection import Connected
 from objects.weight import Weight
 from objects.player import Player
 from event import Event
@@ -8,5 +9,6 @@ class Fire(Interactable):
         super().__init__(x, y, tileset, 408)
 
     def interact(self, obj):
-        if (type(obj) is Weight) or (type(obj) is Player):
+        if isinstance(obj, Connected):
+            obj.unfreeze()
             return Event.UNFREEZE

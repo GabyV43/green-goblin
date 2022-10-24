@@ -2,37 +2,41 @@ import pygame
 
 from objects.moveable import Moveable
 
+i = 0
+
 
 class Connected(Moveable):
     frozen: bool
     # The list of objects, we're connected to
     cons: list[tuple['Connected', int]]
+    con_id: int
+    obj_id: int
 
-    def __init__(self, x, y, tileset, index, moveables, collision):
+    def __init__(self, x, y, tileset, index, moveables, collision, uid: int):
         super().__init__(x, y, tileset, index, moveables, collision)
         self.cons = [(self, 0)]
         self.frozen = False
         self.dead = False
+        self.con_id = uid
+        self.obj_id = uid
 
-    def move(self, dx, dy):
-        if self.frozen:
-            # If at least one of them cannot move, we don't move
-            if any(not c.can_move_to(dx, dy) for c, _ in self.cons):
-                return False
+    def can_move_to(self, dx, dy, ids: list[int] = None):
+        if ids is None:
+            ids = []
 
-            # To make sure we'll not move any object twice,
-            # we'll reorder the `cons` list
-            asc = dx < 0 or dy < 0
-            x_axis = dx != 0
-            cons = sorted(self.cons, key=lambda con: con[0].x if x_axis else con[0].y, reverse=not asc)
-
-            for c, _ in cons:
-                Moveable.move(c, dx, dy)
+        if self.con_id in ids:
+            return Moveable.can_move_to(self, dx, dy, ids)
         else:
-            if not self.can_move_to(dx, dy):
-                return False
+            ids.append(self.con_id)
 
-            # First of all check if we can move
+        if self.frozen:
+            if any(not c.can_move_to(dx, dy, ids) for c, _ in self.cons):
+                return False
+        else:
+            if not self.can_move_to(dx, dy, ids):
+                return False
+            pulls = []
+
             for c, dist in self.cons:
                 dist_x = abs(self.x + dx - c.x)
                 dist_y = abs(self.y + dy - c.y)
@@ -40,9 +44,39 @@ class Connected(Moveable):
                 is_pulling = dist_x + dist_y > dist
                 is_right_dir = self.x + dx == c.x or self.y + dy == c.y
 
-                if is_pulling and not is_right_dir:
+                if is_pulling:
+                    if not is_right_dir:
+                        return False
+                    pulls.append(c)
+
+            for p in pulls:
+                if not p.can_move_to(dx, dy, ids):
                     return False
 
+        return True
+
+    def push(self, dx, dy, ids: list[int] = None):
+        if ids is None:
+            ids = []
+
+        if self.con_id in ids:
+            return Moveable.push(self, dx, dy, ids)
+        else:
+            ids.append(self.con_id)
+
+        if self.frozen:
+            global i
+            print(f"{i} Moving frozen object")
+            i += 1
+            # To make sure we'll not move any object twice,
+            # we'll reorder the `cons` list
+            asc = dx < 0 or dy < 0
+            x_axis = dx != 0
+            cons = sorted(self.cons, key=lambda con: con[0].x if x_axis else con[0].y, reverse=not asc)
+
+            for c, _ in cons:
+                Moveable.push(c, dx, dy, ids)
+        else:
             # We'll not do a `self.push(...)` here
             # because `self` is already inside `self.cons`
             asc = dx < 0 or dy < 0
@@ -55,16 +89,14 @@ class Connected(Moveable):
                 dist_y = abs(self.y + dy - c.y)
 
                 is_pulling = dist_x + dist_y > dist
-                if dist != 0:
-                    print(f"Diff: ({dist_x}, {dist_y})\nWalk: ({dx}, {dy})\nPos: ({self.x+dx}, {self.y+dy})\nPush: ({c.x}, {c.y})")
+                # if dist != 0:
+                # print(f"Diff: ({dist_x}, {dist_y})\nWalk: ({dx}, {dy})\nPos: ({self.x+dx}, {self.y+dy})\nPush: ({c.x}, {c.y})")
 
                 if is_pulling:
                     pulls.append(c)
 
             for c in pulls:
-                c.push(dx, dy)
-
-            print()
+                c.push(dx, dy, ids)
 
         return True
 
@@ -91,32 +123,40 @@ class Connected(Moveable):
             # die_sound = mixer.Sound("sounds_effects/gameover.mp3")
             # die_sound.play()
 
+    def render(self, surface, index=-1, offset=(0, 0)):
+        if self.obj_id == self.con_id:
+            self.draw_chain(surface, offset)
+        super().render(surface, index, offset)
+
     def draw_chain(self, surface, offset):
-        return # TODO
+        for c, dist in self.cons:
+            if dist == 0 or dist == 1000:
+                continue
 
-        dist_px = math.sqrt(
-            ((self.x - self.weight.x) * self.tileset.size[0]) ** 2 +
-            ((self.y - self.weight.y) * self.tileset.size[1]) ** 2)
+            import math
 
-        chain_width = self.tileset.chain_original.get_width()
-        count = math.ceil(dist_px / chain_width)
+            dist_px = math.sqrt(
+                ((self.x - c.x) * self.tileset.size[0]) ** 2 +
+                ((self.y - c.y) * self.tileset.size[1]) ** 2)
 
-        angle = math.atan2(self.weight.y - self.y, self.weight.x - self.x)
+            chain_width = self.tileset.chain_original.get_width()
+            count = math.ceil(dist_px / chain_width)
 
-        for i in range(count):
-            self.draw_single_chain_piece(surface, math.degrees(-angle),
-                                         (
-                                             (self.x + 0.5) * self.tileset.size[0] * self.tileset.scale + i *
-                                             math.cos(
-                                                 angle) * self.tileset.chain.get_width(),
-                                             (self.y + 0.5) * self.tileset.size[1] * self.tileset.scale + i *
-                                             math.sin(
-                                                 angle) * self.tileset.chain.get_width()
-            ),
-                offset
-            )
+            angle = math.atan2(c.y - self.y, c.x - self.x)
+            print(dist, count, dist_px, math.degrees(angle))
 
-        self.weight.render(surface, offset)
+            for i in range(count):
+                self.draw_single_chain_piece(
+                    surface,
+                    math.degrees(-angle),
+                    (
+                        (self.x + 0.5) * self.tileset.size[0] * self.tileset.scale + i *
+                        math.cos(angle) * self.tileset.chain.get_width(),
+                        (self.y + 0.5) * self.tileset.size[1] * self.tileset.scale + i *
+                        math.sin(angle) * self.tileset.chain.get_width()
+                    ),
+                    offset
+                )
 
     def draw_single_chain_piece(self, surface, angle, pos, offset):
         if self.frozen:
@@ -168,3 +208,10 @@ class Connected(Moveable):
 
         c1.cons.append((c2, dist))
         c2.cons.append((c1, dist))
+
+        cid = min(c1.con_id, c2.con_id)
+
+        for c, _ in c1.cons + c2.cons:
+            c.con_id = cid
+
+        print(c1, c2, dist)

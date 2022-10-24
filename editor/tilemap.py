@@ -12,6 +12,7 @@ from .tiles import TILES
 from .renderable import Renderable
 from .tileset import TileSet
 from xml.etree import ElementTree as ET
+from dataclasses import dataclass
 
 
 WANG_ORDER = [
@@ -32,6 +33,11 @@ INTERACTABLES_IDS = [204, 206, 208, 262, 263, 378, 408, 523, 581, 553]
 SLIME_IDS = [527, 556, 585, 470, 471, 472, 529, 558, 587, 562, 563, 564]
 SLIME_IN_IDS = [266, 267, 268, 323, 352, 381, 325, 354, 383, 358, 359, 360]
 
+@dataclass
+class Conn:
+    fr: tuple[int, int]
+    to: tuple[int, int]
+    dist: int
 
 class TileMap(Renderable, Scalable):
     source: str | None
@@ -39,6 +45,7 @@ class TileMap(Renderable, Scalable):
     ground: numpy.ndarray
     interactables: dict[tuple[int, int], int]
     movables: dict[tuple[int, int], int]
+    connections: list[Conn]
     shape: tuple[int, int]
     player: tuple[int, int] | None
     weight: tuple[int, int] | None
@@ -64,6 +71,7 @@ class TileMap(Renderable, Scalable):
 
         self.interactables = {}
         self.movables = {}
+        self.connections = []
 
         self.player = None
         self.weight = None
@@ -365,6 +373,13 @@ class TileMap(Renderable, Scalable):
             os.path.dirname(location)
         )
 
+        connections = ET.SubElement(map, "connections")
+        for con in self.connections:
+            conn = ET.SubElement(connections, "conn")
+            conn.attrib["from"] = f"{con.fr[0]},{con.fr[1]}"
+            conn.attrib["to"] = f"{con.to[0]},{con.to[1]}"
+            conn.attrib["distance"] = str(con.dist)
+
         ground = ET.SubElement(map, "layer")
         ground.attrib["id"] = "1"
         ground.attrib["name"] = "collision"
@@ -404,14 +419,22 @@ class TileMap(Renderable, Scalable):
         root = tree.getroot()
         self.movables = {}
         self.interactables = {}
-        self.ground = self.load_layer(root[1])
+        self.connections = []
+        begin = 1
+        if root[1].tag == 'connections':
+            begin = 2
 
-        for layer in root[2:-1]:
+        self.ground = self.load_layer(root[begin])
+
+        for layer in root[begin:-1]:
             if layer.attrib["name"][:3].lower() == "obj":
                 self.load_objects(layer)
             else:
                 ...  # We're ignoring decorations for now
         self.load_objects(root[-1])
+
+        if root[1].tag == 'connections':
+            self.load_connections(root[1])
 
         self.shape = self.ground.shape
 
@@ -455,6 +478,16 @@ class TileMap(Renderable, Scalable):
                 pass  # In this case there is nothing there
             else:
                 raise Exception(f"Unkown id {id}")
+
+    def load_connections(self, layer: ET.Element):
+        for con in layer:
+            assert con.tag == 'conn'
+            conn = Conn(
+                tuple(map(int, con.attrib["from"].split(','))),
+                tuple(map(int, con.attrib["to"].split(','))),
+                int(con.attrib["distance"]),
+            )
+            self.connections.append(conn)
 
     def resize(self, right: int, bottom: int, left: int, top: int):
         assert abs(right + bottom + left + top) == 1
@@ -513,14 +546,22 @@ class TileMap(Renderable, Scalable):
             self.player = (self.player[0] + dx, self.player[1] + dy)
         if self.weight is not None:
             self.weight = (self.weight[0] + dx, self.weight[1] + dy)
+
         new_movables = {}
         new_inters = {}
+
         for pos in self.movables:
             new_pos = (pos[0] + dx, pos[1] + dy)
             new_movables[new_pos] = self.movables[pos]
         for pos in self.interactables:
             new_pos = (pos[0] + dx, pos[1] + dy)
             new_inters[new_pos] = self.interactables[pos]
+        for con in self.connections:
+            new_fr = (con.fr[0] + dx, con.fr[1] + dy)
+            new_to = (con.to[0] + dx, con.to[1] + dy)
+            con.fr = new_fr
+            con.to = new_to
+
         self.movables = new_movables
         self.interactables = new_inters
 
