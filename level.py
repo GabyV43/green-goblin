@@ -62,7 +62,6 @@ class Level:
         self.click_z = 0
 
     def render(self, surface: Surface):
-        print("--- NEW FRAME ---")
         w = int(surface.get_width() // self.tileset.scale // 4)
         h = int(surface.get_height() // self.tileset.scale // 4)
 
@@ -80,7 +79,6 @@ class Level:
             self.interactables[pos].render(surface, offset=self.offset)
 
         for mov in self.moveables:
-            print(f"id {mov.obj_id}  t {type(mov)}")
             mov.render(surface, offset=self.offset)
 
         # self.player.render(surface, offset=self.offset)

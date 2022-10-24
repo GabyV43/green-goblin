@@ -41,7 +41,7 @@ SLIME_IDS = [527, 556, 585, 470, 471, 472, 529, 558, 587, 562, 563, 564]
 SLIME_IN_IDS = [266, 267, 268, 323, 352, 381, 325, 354, 383, 358, 359, 360]
 
 
-class Loader():
+class Loader:
     def __init__(self, level_list, screen_size, on_all_finished_handler=None, current_level=0):
         self.tileset = None
         self.screen_size = screen_size

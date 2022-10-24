@@ -2,8 +2,6 @@ import pygame
 
 from objects.moveable import Moveable
 
-i = 0
-
 
 class Connected(Moveable):
     frozen: bool
@@ -65,9 +63,6 @@ class Connected(Moveable):
             ids.append(self.con_id)
 
         if self.frozen:
-            global i
-            print(f"{i} Moving frozen object")
-            i += 1
             # To make sure we'll not move any object twice,
             # we'll reorder the `cons` list
             asc = dx < 0 or dy < 0
@@ -89,8 +84,6 @@ class Connected(Moveable):
                 dist_y = abs(self.y + dy - c.y)
 
                 is_pulling = dist_x + dist_y > dist
-                # if dist != 0:
-                # print(f"Diff: ({dist_x}, {dist_y})\nWalk: ({dx}, {dy})\nPos: ({self.x+dx}, {self.y+dy})\nPush: ({c.x}, {c.y})")
 
                 if is_pulling:
                     pulls.append(c)
@@ -124,7 +117,6 @@ class Connected(Moveable):
             # die_sound.play()
 
     def render(self, surface, index=-1, offset=(0, 0)):
-        print(self.obj_id, self.con_id)
         if self.obj_id == self.con_id:
             self.draw_chain(surface, offset)
         super().render(surface, index, offset)
