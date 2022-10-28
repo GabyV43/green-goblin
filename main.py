@@ -183,6 +183,7 @@ level_list = [
     "maps/fases_mark/all_n10.tmx",
     "maps/fases_mark/hard11.tmx",
     "maps/new_tech/teste1.tmx",
+    "maps/new_tech/ice1.tmx",
 ]
 
 if __name__ == '__main__':

@@ -184,24 +184,39 @@ class Connected(Moveable):
         self.frozen = state[7]
 
     # A distance of 1000 implies infinite max_distance
-    # Don't ask how it works, it just does
     @staticmethod
     def interconnect(c1: 'Connected', c2: 'Connected', dist: int = 1000):
         for c, _ in c1.cons[1:]:
+            if c is c1:
+                continue
             if c2 not in (k for k, _ in c.cons):
                 c.cons.append((c2, 1000))
             if c not in (k for k, _ in c2.cons):
                 c2.cons.append((c, 1000))
         for c, _ in c2.cons[1:]:
+            if c is c2:
+                continue
             if c1 not in (k for k, _ in c.cons):
                 c.cons.append((c1, 1000))
             if c not in (k for k, _ in c1.cons):
                 c1.cons.append((c, 1000))
 
+        if c2 in (k for k, _ in c1.cons):
+            con = next(con for con in c1.cons if con[0] is c2)
+            c1.cons.remove(con)
         c1.cons.append((c2, dist))
+        if c1 in (k for k, _ in c2.cons):
+            con = next(con for con in c2.cons if con[0] is c1)
+            c2.cons.remove(con)
         c2.cons.append((c1, dist))
 
         cid = min(c1.con_id, c2.con_id)
 
         for c, _ in c1.cons + c2.cons:
             c.con_id = cid
+
+        assert len(c1.cons) == len(c2.cons)
+        for c, _ in c1.cons:
+            assert len(c.cons) == len(c1.cons)
+        for c, _ in c2.cons:
+            assert len(c.cons) == len(c2.cons)
