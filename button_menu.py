@@ -38,19 +38,21 @@ class ButtonMenu():
         self.text_off_y_redim = self.text_off_y * scale
 
     def render(self, surface, page):
-        
+
         if page == self.book_page:
             if self.on:
                 surface.blit(self.image_on_resized, (self.xredim +
-                            self.offsetx, self.offsety + self.yredim))
+                                                     self.offsetx, self.offsety + self.yredim))
                 surface.blit(self.text_img_resized, (self.xredim + self.offsetx +
-                            self.text_off_x_redim, self.offsety + self.yredim + self.text_off_y_redim))
+                                                     self.text_off_x_redim,
+                                                     self.offsety + self.yredim + self.text_off_y_redim))
 
             else:
                 surface.blit(self.image_off_resized, (self.xredim +
-                            self.offsetx, self.offsety + self.yredim))
+                                                      self.offsetx, self.offsety + self.yredim))
                 surface.blit(self.text_img_off_resized, (self.xredim + self.offsetx +
-                            self.text_off_x_redim, self.offsety + self.yredim + self.text_off_y_redim))
+                                                         self.text_off_x_redim,
+                                                         self.offsety + self.yredim + self.text_off_y_redim))
 
     def contains(self, x, y, page):
         if page != self.book_page:

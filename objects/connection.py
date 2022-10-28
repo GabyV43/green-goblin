@@ -1,9 +1,6 @@
-from dataclasses import dataclass
-
 import pygame
 
 from objects.moveable import Moveable
-
 
 
 class Connected(Moveable):

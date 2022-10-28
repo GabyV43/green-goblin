@@ -1,9 +1,9 @@
-import os
 import random
+
 import numpy
 import pygame
-from editor.tiles import SOUNDS, TILES
 
+from editor.tiles import SOUNDS
 from loader import Loader
 from .bar import Bar
 from .event_handler import EventHandler
@@ -42,7 +42,7 @@ class Screen(Renderable, EventHandler, Scalable):
         self.drag = -1
         root = SOUNDS["root"]
         self.set_sounds = [
-            None # pygame.mixer.Sound(os.path.join(root, file))
+            None  # pygame.mixer.Sound(os.path.join(root, file))
             for file in SOUNDS["set"]
         ]
 
@@ -105,6 +105,7 @@ class Screen(Renderable, EventHandler, Scalable):
                                    tile["id"] == 527, sound)
         elif type == "chain" and static:
             self.tilemap.connect(self.tile_mouse_pos, sound)
+
     def handle_remove(self):
         pos = self.tile_mouse_pos
         if not (0 <= pos[0] < self.tilemap.shape[0]) or not (0 <= pos[1] < self.tilemap.shape[1]):
