@@ -687,3 +687,30 @@ class TileMap(Renderable, Scalable):
         new_rect = new_rect.move(offset)
         surface.blit(rotated_chain, new_rect)
         # print(pos)
+
+    def remove_chain(self, mouse_pos, old_mouse_pos):
+        from editor.geometry import Line
+
+        tx, ty = self.tileset.tile_size
+        tx *= self.tileset.scale
+        ty *= self.tileset.scale
+
+        to_be_removed = []
+
+        for i, con in enumerate(self.connections):
+            line_a = Line(old_mouse_pos, mouse_pos)
+            line_b = Line(
+                (
+                    con.fr[0] * tx + tx // 2,
+                    con.fr[1] * ty + ty // 2,
+                ), (
+                    con.to[0] * tx + tx // 2,
+                    con.to[1] * ty + ty // 2,
+                )
+            )
+
+            if line_a.intersects(line_b):
+                to_be_removed.append(i)
+
+        if len(to_be_removed) > 0:
+            self.connections[:] = [x for i, x in enumerate(self.connections) if i not in to_be_removed]

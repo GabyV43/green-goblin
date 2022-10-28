@@ -17,7 +17,8 @@ class Screen(Renderable, EventHandler, Scalable):
     tileset: TileSet
     tilemap: TileMap
     tile_mouse_pos: tuple[int, int]
-    mouse_pos: tuple[int, int]
+    mouse_pos: tuple[int, int] = (0, 0)
+    old_mouse_pos: tuple[int, int]
     drag: int
     bar: Bar
     screen_size: tuple[int, int]
@@ -110,13 +111,18 @@ class Screen(Renderable, EventHandler, Scalable):
         pos = self.tile_mouse_pos
         if not (0 <= pos[0] < self.tilemap.shape[0]) or not (0 <= pos[1] < self.tilemap.shape[1]):
             return
-        self.tilemap.remove(pos, self.bar.selected)
+
+        if self.bar.selected_tile()["type"] == "chain":
+            self.tilemap.remove_chain(self.mouse_pos, self.old_mouse_pos)
+        else:
+            self.tilemap.remove(pos, self.bar.selected)
 
     def render(self, surface: pygame.Surface, offset: tuple[int, int] = (0, 0)):
         if self.loader is not None:
             self.loader.level.render(surface)
             return
 
+        self.old_mouse_pos = self.mouse_pos
         self.mouse_pos = mx, my = pygame.mouse.get_pos()
         sx = self.tileset.tile_size[0] * self.tileset.scale
         sy = self.tileset.tile_size[1] * self.tileset.scale
