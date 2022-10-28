@@ -1,6 +1,7 @@
+from event import Event
 from interactable import Interactable
 from objects.player import Player
-from event import Event
+
 
 class PlayerEnd(Interactable):
     def __init__(self, x, y, tileset):
@@ -34,5 +35,3 @@ class PlayerEnd(Interactable):
         self.x = state[0]
         self.y = state[1]
         self.active = state[2]
-
-

@@ -4,10 +4,10 @@ import pygame
 from pygame.locals import *
 
 from book import Book
+from editor import cache
+from editor.screen import Screen as Editor
 from loader import Loader
 
-from editor.screen import Screen as Editor
-from editor import cache
 
 class Game:
     state: str
@@ -156,7 +156,7 @@ level_list = [
     "maps/intro_slime/fase2.tmx",
     "maps/level3.tmx",
     "maps/intro_slime/fase3.tmx",
-    #"maps/intro_slime/fase4.tmx", # intro slime
+    # "maps/intro_slime/fase4.tmx", # intro slime
     "maps/intro_slime/fase5.tmx",
     "maps/intro_slime/fase5_challenge.tmx",
     "maps/fases_mark/slime_nova.tmx",

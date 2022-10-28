@@ -1,6 +1,7 @@
+import time
+
 import pygame
 from pygame.locals import *
-import time
 
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)

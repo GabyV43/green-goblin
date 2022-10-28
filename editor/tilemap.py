@@ -1,19 +1,19 @@
 import csv
-
-from typing import Any
-from loader import Loader
-from io import StringIO
 import os
+from dataclasses import dataclass
+from io import StringIO
 from tkinter import filedialog, messagebox, simpledialog
+from typing import Any
+from xml.etree import ElementTree as ET
+
 import numpy
 import pygame
+
+from loader import Loader
+from .renderable import Renderable
 from .scalable import Scalable
 from .tiles import TILES
-from .renderable import Renderable
 from .tileset import TileSet
-from xml.etree import ElementTree as ET
-from dataclasses import dataclass
-
 
 WANG_ORDER = [
     (0, -1),
@@ -33,11 +33,13 @@ INTERACTABLES_IDS = [204, 206, 208, 262, 263, 378, 408, 523, 581, 553]
 SLIME_IDS = [527, 556, 585, 470, 471, 472, 529, 558, 587, 562, 563, 564]
 SLIME_IN_IDS = [266, 267, 268, 323, 352, 381, 325, 354, 383, 358, 359, 360]
 
+
 @dataclass
 class Conn:
     fr: tuple[int, int]
     to: tuple[int, int]
     dist: int
+
 
 class TileMap(Renderable, Scalable):
     source: str | None
@@ -54,9 +56,11 @@ class TileMap(Renderable, Scalable):
     border: pygame.rect.Rect
     # We call it wang_ground because we'll have wang_slime too
     wang_ground: dict[str, int]
+
     # wang_slime: dict[str, int]
 
-    def __init__(self, tileset: TileSet, matrix: numpy.ndarray, screen: Any, init: bool = True, source: str | None = None):
+    def __init__(self, tileset: TileSet, matrix: numpy.ndarray, screen: Any, init: bool = True,
+                 source: str | None = None):
         self.source = source
         self.tileset = tileset
         self.ground = matrix
@@ -676,11 +680,10 @@ class TileMap(Renderable, Scalable):
                 offset
             )
 
-    def draw_single_chain_piece(self, surface: pygame.Surface, angle: float, pos: tuple[float, float], offset: tuple[int, int]):
+    def draw_single_chain_piece(self, surface: pygame.Surface, angle: float, pos: tuple[float, float],
+                                offset: tuple[int, int]):
         rotated_chain = pygame.transform.rotate(self.tileset.chain, angle)
         new_rect = rotated_chain.get_rect(bottomright=self.tileset.chain.get_rect(topleft=pos).center)
         new_rect = new_rect.move(offset)
         surface.blit(rotated_chain, new_rect)
         # print(pos)
-
-

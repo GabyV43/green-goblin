@@ -1,13 +1,9 @@
-import csv
-import numpy as np
-
-
 class TileMap:
     def __init__(self, tileset, matrix):
         self.tileset = tileset
         self.data = matrix
 
-    def render(self, surface, offset=(0,0)):
+    def render(self, surface, offset=(0, 0)):
         scale = self.tileset.scale
         tw, th = self.tileset.size
 

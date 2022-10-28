@@ -10,5 +10,3 @@ class Box(Connected):
             super().render(surface, 31, offset)
         else:
             super().render(surface, index, offset)
-
-

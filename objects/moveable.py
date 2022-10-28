@@ -1,5 +1,3 @@
-
-
 class Moveable:
     def __init__(self, x, y, tileset, index, moveables, collision):
         self.x = x
@@ -16,7 +14,7 @@ class Moveable:
 
     def move(self, dx, dy):
         if self.can_move_to(dx, dy):
-             return self.push(dx, dy)
+            return self.push(dx, dy)
         return False
 
     def push(self, dx, dy, ids: list[int] = None):
@@ -69,7 +67,7 @@ class Moveable:
 
         img = self.tileset.tiles[index]
         surface.blit(img, (self.x * tw * scale +
-                     offset[0], self.y * th * scale + offset[1]))
+                           offset[0], self.y * th * scale + offset[1]))
 
     def die(self):
         self.dead = True

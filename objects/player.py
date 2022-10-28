@@ -1,11 +1,7 @@
 from pygame.locals import *
-
-from objects.connection import Connected
-from objects.moveable import Moveable
-import pygame
-import math
 from pygame.time import get_ticks
 
+from objects.connection import Connected
 
 INITIAL_DELAY = 300
 AFTER_DELAY = 100
@@ -146,4 +142,3 @@ class Player(Connected):
             super().render(surface, index, offset)
         else:
             super().render(surface, index, offset=offset)
-

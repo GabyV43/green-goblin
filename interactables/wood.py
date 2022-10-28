@@ -1,6 +1,6 @@
+from event import Event
 from interactable import Interactable
 from objects.weight import Weight
-from event import Event
 
 
 class Wood(Interactable):
@@ -13,7 +13,7 @@ class Wood(Interactable):
             self.inter = True
             return Event.WEIGHT_DIE
 
-    def render(self, surface, offset=(0,0)):
+    def render(self, surface, offset=(0, 0)):
         if not self.inter:
             super().render(surface, offset=offset)
         else:
@@ -30,4 +30,3 @@ class Wood(Interactable):
         self.x = state[0]
         self.y = state[1]
         self.inter = state[2]
-

@@ -1,4 +1,5 @@
 import pygame
+
 from ..renderable import Renderable
 
 
@@ -13,7 +14,8 @@ class Button(Renderable):
     text_drawn: pygame.Surface
     text_rect: pygame.Rect
 
-    def __init__(self, font: pygame.font.Font, text: str, color: any, text_color: any, size: tuple[int, int], position: tuple[int, int] | None = None, center: tuple[int, int] | None = None):
+    def __init__(self, font: pygame.font.Font, text: str, color: any, text_color: any, size: tuple[int, int],
+                 position: tuple[int, int] | None = None, center: tuple[int, int] | None = None):
         self.text = text
         self.size = size
         self.color = color

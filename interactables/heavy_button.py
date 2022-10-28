@@ -1,7 +1,5 @@
-from interactable import Interactable
-from objects.moveable import Moveable
 from event import Event
-
+from interactable import Interactable
 from objects.weight import Weight
 
 

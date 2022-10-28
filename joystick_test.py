@@ -1,6 +1,5 @@
 import pygame
 
-
 # Define some colors.
 BLACK = pygame.Color('black')
 WHITE = pygame.Color('white')

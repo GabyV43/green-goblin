@@ -1,6 +1,7 @@
+from math import ceil
+
 import pygame
 from pygame.locals import SRCALPHA
-from math import ceil
 
 
 class TileSet:

@@ -1,12 +1,14 @@
 import math
+
 import pygame
-from .ui.button import Button
-from .ui.text import Text
+
 from .renderable import Renderable
 from .scalable import Scalable
 from .tilemap import TileMap
-from .tileset import TileSet
 from .tiles import TILE_KEYS, TILES
+from .tileset import TileSet
+from .ui.button import Button
+from .ui.text import Text
 
 
 class Bar(Renderable, Scalable):
@@ -132,7 +134,7 @@ class Bar(Renderable, Scalable):
                 return
 
         if self.tilemap.source is not None and \
-                self.save.contains_point(mouse_pos):
+            self.save.contains_point(mouse_pos):
             self.tilemap.save()
         elif self.save_as.contains_point(mouse_pos):
             self.tilemap.saveas()
@@ -171,7 +173,7 @@ class Bar(Renderable, Scalable):
         self.screen_size = pygame.display.get_surface().get_size()
 
         self.scale = self.screen_size[1] / \
-            (140 + self.tileset.tile_size[1] * self.lines)
+                     (140 + self.tileset.tile_size[1] * self.lines)
 
         self.width = self.tileset.tile_size[0] * self.scale * self.columns
 

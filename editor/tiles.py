@@ -1,6 +1,5 @@
 import pygame
 
-
 TILES = {
     "ground": {"type": "ground", "id": 313},
     "wood": {"type": "interactable", "id": 204},

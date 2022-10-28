@@ -1,4 +1,5 @@
 import pygame
+
 from ..renderable import Renderable
 from ..scalable import Scalable
 
@@ -14,7 +15,8 @@ class Text(Renderable, Scalable):
     rect: pygame.Rect
     drawn: pygame.Surface
 
-    def __init__(self, font: pygame.font.Font, text: str, color: any, size: int, position: tuple[int, int] | None = None, center: tuple[int, int] | None = None):
+    def __init__(self, font: pygame.font.Font, text: str, color: any, size: int,
+                 position: tuple[int, int] | None = None, center: tuple[int, int] | None = None):
         self.font = font
         self.text = text
         self.color = color

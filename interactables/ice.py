@@ -1,6 +1,6 @@
+from event import Event
 from interactable import Interactable
 from objects.connection import Connected
-from event import Event
 
 
 class Ice(Interactable):

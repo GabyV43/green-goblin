@@ -51,7 +51,7 @@ class Book():
 
     def render(self, surface):
         surface.blit(self.image, (self.margin +
-                     self.off_x, self.margin + self.off_y))
+                                  self.off_x, self.margin + self.off_y))
 
         for button in self.buttons:
             button.render(surface, self.book_page)
@@ -90,7 +90,7 @@ class Book():
                              self.margin + self.off_x, self.margin + self.off_y, font, book_page)
 
             self.buttons.append(btn)
-            
+
             column += 1
             if column >= per_line:
                 column = 0

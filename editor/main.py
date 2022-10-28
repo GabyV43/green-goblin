@@ -1,6 +1,7 @@
 import pygame
-from .screen import Screen
+
 from . import cache
+from .screen import Screen
 
 
 def main():

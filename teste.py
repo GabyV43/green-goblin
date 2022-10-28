@@ -83,8 +83,6 @@
 #         print("Ooo raca viu")
 
 
-
-
 while True:
 
     try:
@@ -109,5 +107,3 @@ while True:
 
     except EOFError:
         break
-
-

@@ -1,5 +1,5 @@
-from interactable import Interactable
 from event import Event
+from interactable import Interactable
 from objects.box import Box
 
 

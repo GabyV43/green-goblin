@@ -1,28 +1,28 @@
-from email import message
-from interactables.box_end import BoxEnd
-from interactables.player_end import PlayerEnd
-from interactables.weight_end import WeightEnd
+import time
+from math import ceil
+
 import pygame
 from pygame import Surface
 from pygame.locals import *
+
 from event import Event
+from interactables.box_end import BoxEnd
+from interactables.player_end import PlayerEnd
+from interactables.slime import Slime
+from interactables.weight_end import WeightEnd
 from objects.box import Box
 from objects.player import Player
-from objects.weight import Weight
-from interactables.slime import Slime
-import time
 from tileset import TileSet
-from pygame import mixer
-from math import ceil
 
 
 class Level:
     player: Player
 
-    def __init__(self, tileset: TileSet, player, weight, moveables, interactables, decorations, collision, loader, name):
+    def __init__(self, tileset: TileSet, player, weight, moveables, interactables, decorations, collision, loader,
+                 name):
         self.tileset = tileset
         self.player = player
-        self.weight  = weight
+        self.weight = weight
         self.moveables = moveables
         self.interactables = interactables
         self.decorations = decorations
@@ -68,7 +68,7 @@ class Level:
         for x in range(w):
             for y in range(h):
                 surface.blit(self.resized_bg, (x * 128 *
-                             self.tileset.scale, y * 128 * self.tileset.scale))
+                                               self.tileset.scale, y * 128 * self.tileset.scale))
 
         self.collision.render(surface, self.offset)
 
@@ -191,9 +191,9 @@ class Level:
         elif event == Event.BUTTON_UNPRESS:
             self.button_pressed = False
         elif event == Event.FREEZE:
-            ... # self.player.freeze()
+            ...  # self.player.freeze()
         elif event == Event.UNFREEZE:
-            ... # self.player.unfreeze()
+            ...  # self.player.unfreeze()
 
     def resize_tileset(self, width, height):
         th, tw = self.collision.data.shape

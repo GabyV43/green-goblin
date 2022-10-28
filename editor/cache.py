@@ -1,5 +1,5 @@
-from os import path
 import pickle
+from os import path
 
 
 def load_cache():

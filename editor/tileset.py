@@ -1,10 +1,12 @@
 import math
 import os
-from tkinter import filedialog
-from . import cache
-import pygame
-from .scalable import Scalable
 import xml.etree.ElementTree as ET
+from tkinter import filedialog
+
+import pygame
+
+from . import cache
+from .scalable import Scalable
 
 
 class TileSet(Scalable):

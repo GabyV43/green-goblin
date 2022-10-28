@@ -1,8 +1,7 @@
+from event import Event
 from interactable import Interactable
 from objects.connection import Connected
-from objects.weight import Weight
-from objects.player import Player
-from event import Event
+
 
 class Fire(Interactable):
     def __init__(self, x, y, tileset):

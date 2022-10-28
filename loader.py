@@ -1,7 +1,10 @@
+import csv
+import os
 import xml.etree.ElementTree as ET
 from io import StringIO
+
 import numpy as np
-import csv
+
 from interactables.box_end import BoxEnd
 from interactables.button import Button
 from interactables.fire import Fire
@@ -16,13 +19,10 @@ from interactables.wood import Wood
 from level import Level
 from objects.box import Box
 from objects.connection import Connected
-from tilemap import TileMap
-from tileset import TileSet
-
 from objects.player import Player
 from objects.weight import Weight
-
-import os
+from tilemap import TileMap
+from tileset import TileSet
 
 PLAYER_ID = 30
 BOX_ID = 146
@@ -183,7 +183,7 @@ class Loader:
 
         self.decorations = []
 
-        for layer in root[begin+1:-1]:
+        for layer in root[begin + 1:-1]:
             if layer.attrib["name"][:3].lower() == "obj":
                 self.load_objects(layer)
             else:
