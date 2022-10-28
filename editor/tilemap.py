@@ -4,7 +4,7 @@ from typing import Any
 from loader import Loader
 from io import StringIO
 import os
-from tkinter import filedialog, messagebox
+from tkinter import filedialog, messagebox, simpledialog
 import numpy
 import pygame
 from .scalable import Scalable
@@ -46,6 +46,7 @@ class TileMap(Renderable, Scalable):
     interactables: dict[tuple[int, int], int]
     movables: dict[tuple[int, int], int]
     connections: list[Conn]
+    connecting: tuple[int, int] | None
     shape: tuple[int, int]
     player: tuple[int, int] | None
     weight: tuple[int, int] | None
@@ -61,6 +62,7 @@ class TileMap(Renderable, Scalable):
         self.ground = matrix
         self.screen = screen
         self.shape = self.ground.shape
+        self.connecting = None
 
         self.border = pygame.Rect(
             0,
@@ -150,6 +152,10 @@ class TileMap(Renderable, Scalable):
                 pos[0] * tw * scale + offset[0],
                 pos[1] * th * scale + offset[1],
             ))
+
+        # draw connections
+        for con in self.connections:
+            self.draw_chain(con, surface, offset)
 
         # draw moveables
         for pos in self.movables:
@@ -619,3 +625,62 @@ class TileMap(Renderable, Scalable):
         loader = Loader([lvl_name], self.screen.screen_size,
                         on_all_finished_handler=lambda: self.screen.finish_test())
         self.screen.loader = loader
+
+    def connect(self, tile_mouse_pos: tuple[int, int], sound):
+        if tile_mouse_pos not in self.movables:
+            self.connecting = None
+            return
+        if self.connecting is None:
+            self.connecting = tile_mouse_pos
+            print("Connecting:", self.connecting)
+        else:
+            dist = 0
+            min_dist = sum(abs(a - b) for a, b in zip(tile_mouse_pos, self.connecting))
+            while 1 > dist or dist < min_dist:
+                read = simpledialog.askinteger("Chain distance", "What should the distance be?")
+                if read is None:
+                    self.connecting = None
+                    return
+                dist = int(read) + 1
+            print(dist)
+
+            self.connections.append(Conn(self.connecting, tile_mouse_pos, dist))
+            self.connecting = None
+
+    def draw_chain(self, con: Conn, surface, offset: tuple[int, int]):
+        import math
+
+        f = con.fr
+        t = con.to
+
+        dist_px = math.sqrt(
+            ((f[0] - t[0]) * self.tileset.tile_size[0]) ** 2 +
+            ((f[1] - t[1]) * self.tileset.tile_size[1]) ** 2
+        ) * self.tileset.scale
+
+        chain_width = self.tileset.chain.get_width()
+        count = math.ceil(dist_px / chain_width)
+
+        angle = math.atan2(t[1] - f[1], t[0] - f[0])
+
+        for i in range(count):
+            self.draw_single_chain_piece(
+                surface,
+                math.degrees(-angle),
+                (
+                    (f[0] + 0.5) * self.tileset.tile_size[0] * self.tileset.scale + i *
+                    math.cos(angle) * self.tileset.chain.get_width(),
+                    (f[1] + 0.5) * self.tileset.tile_size[1] * self.tileset.scale + i *
+                    math.sin(angle) * self.tileset.chain.get_width()
+                ),
+                offset
+            )
+
+    def draw_single_chain_piece(self, surface: pygame.Surface, angle: float, pos: tuple[float, float], offset: tuple[int, int]):
+        rotated_chain = pygame.transform.rotate(self.tileset.chain, angle)
+        new_rect = rotated_chain.get_rect(bottomright=self.tileset.chain.get_rect(topleft=pos).center)
+        new_rect = new_rect.move(offset)
+        surface.blit(rotated_chain, new_rect)
+        # print(pos)
+
+

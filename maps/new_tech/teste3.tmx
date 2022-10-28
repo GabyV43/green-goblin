@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf8'?>
 <map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="10" height="8" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="1">
-  <tileset firstgid="1" source="..\tileset\Tileset_Oficial_V2.tsx" />
+  <tileset firstgid="1" source="..\..\tileset\Tileset_Oficial_V2.tsx" />
   <connections>
     <conn from="3,3" to="2,5" distance="4" />
     <conn from="3,3" to="5,4" distance="4" />

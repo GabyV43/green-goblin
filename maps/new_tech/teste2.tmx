@@ -1,38 +1,36 @@
 <?xml version='1.0' encoding='utf8'?>
 <map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="10" height="8" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="1">
-  <tileset firstgid="1" source="..\tileset\Tileset_Oficial_V2.tsx" />
+  <tileset firstgid="1" source="..\..\tileset\Tileset_Oficial_V2.tsx" />
   <connections>
-    <conn from="3,3" to="2,5" distance="4" />
-    <conn from="3,3" to="5,4" distance="4" />
-    <conn from="2,5" to="5,4" distance="6" />
+    <conn from="4,5" to="7,3" distance="6" />
   </connections>
   <layer id="1" name="collision" width="10" height="8">
-    <data encoding="csv">492,372,372,372,372,372,372,372,372,491
-396,0,0,0,0,0,0,0,0,281
-396,0,0,0,0,0,0,0,0,281
-396,0,0,0,0,0,0,0,0,281
-396,0,0,0,0,0,0,0,0,281
-396,0,0,0,0,0,0,0,0,281
+    <data encoding="csv">312,492,372,372,372,372,372,372,372,491
+312,396,0,0,0,0,0,0,0,281
+312,396,0,0,0,0,0,0,0,281
+312,396,0,0,0,0,0,0,0,281
+312,463,405,550,0,0,0,0,0,281
+492,372,372,579,0,0,0,0,0,281
 396,0,0,0,0,0,0,0,0,281
 463,405,405,405,405,405,405,405,405,462</data>
   </layer>
   <layer id="3" name="obj1" width="10" height="8">
     <data encoding="csv">0,0,0,0,0,0,0,0,0,0
-0,0,0,0,0,554,0,0,554,0
 0,0,0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0,0,0
-0,0,0,0,0,0,0,0,554,0
 0,0,0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0
+0,524,554,0,582,0,0,0,554,0
 0,0,0,0,0,0,0,0,0,0</data>
   </layer>
   <layer id="4" name="obj2" width="10" height="8">
     <data encoding="csv">0,0,0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0,0,0
-0,0,0,0,0,0,0,31,0,0
-0,0,0,147,0,0,0,0,0,0
-0,0,0,0,0,147,0,149,0,0
-0,0,147,0,0,0,0,0,0,0
+0,0,0,31,0,0,0,0,0,0
+0,0,0,0,149,0,0,147,0,0
+0,0,0,0,0,0,0,0,0,0
+0,0,0,0,147,0,0,0,0,0
 0,0,0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0,0,0</data>
   </layer>

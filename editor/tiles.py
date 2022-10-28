@@ -23,6 +23,7 @@ TILES = {
     "slime": {"type": "slime", "id": 527},
     #
     "slimeInverted": {"type": "slime", "id": 266},
+    "chain": {"type": "chain", "id": 31},
 }
 
 SOUNDS = {

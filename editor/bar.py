@@ -34,7 +34,7 @@ class Bar(Renderable, Scalable):
     hup: Button
     reset: Button
     test: Button
-    size_txt: pygame.Surface
+    size_txt: Text
 
     def __init__(self, tileset: TileSet, columns: int, screen_size: tuple[int, int], tilemap: TileMap):
         self.columns = columns
@@ -46,7 +46,7 @@ class Bar(Renderable, Scalable):
             screen_size[1] / (140 + tileset.tile_size[1] * self.lines),
             tileset.scale
         )
-        self.width = tileset.tile_size[0] * self.scale * columns
+        self.width = int(tileset.tile_size[0] * self.scale * columns)
         self.tileset = tileset
         self.tilemap = tilemap
         self.selected = 0
@@ -162,7 +162,10 @@ class Bar(Renderable, Scalable):
     def selected_tile(self) -> dict[str, any]:
         if self.selected == -1:
             return None
-        return list(TILES.values())[self.selected]
+        tile = list(TILES.values())[self.selected]
+        # if tile["type"] == "chain":
+        #     self.tilemap.connecting = None
+        return tile
 
     def rescale(self, scale: float):
         self.screen_size = pygame.display.get_surface().get_size()

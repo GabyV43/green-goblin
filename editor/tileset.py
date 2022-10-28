@@ -17,6 +17,8 @@ class TileSet(Scalable):
     original_tiles: list[pygame.Surface]
     scaled_tiles: list[pygame.Surface]
     scale: float
+    chain_original: pygame.Surface
+    chain: pygame.Surface
 
     def __init__(self, tile_size: tuple[int, int] | int, margin: int, spacing: int, scale: float):
         tileset_path: str
@@ -51,6 +53,8 @@ class TileSet(Scalable):
             self.file), image.attrib["source"])
 
         self.image = pygame.image.load(img_path)
+
+        self.chain_original = pygame.image.load("images/chain.png")
 
         self.initial_load()
         self.rescale(scale)
@@ -88,6 +92,16 @@ class TileSet(Scalable):
                 )
             )
             self.scaled_tiles.append(resized)
+
+        self.chain = pygame.transform.scale(
+            self.chain_original,
+            (
+                (
+                    math.ceil(self.chain_original.get_width() * scale),
+                    math.ceil(self.chain_original.get_height() * scale),
+                )
+            )
+        )
 
     def get_tile(self, index: int) -> pygame.Surface:
         return self.scaled_tiles[self.indexes[index]]

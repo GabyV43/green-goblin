@@ -1,6 +1,9 @@
+from dataclasses import dataclass
+
 import pygame
 
 from objects.moveable import Moveable
+
 
 
 class Connected(Moveable):
@@ -117,13 +120,13 @@ class Connected(Moveable):
             # die_sound.play()
 
     def render(self, surface, index=-1, offset=(0, 0)):
-        if self.obj_id == self.con_id:
-            self.draw_chain(surface, offset)
+        # if self.obj_id == self.con_id:
+        self.draw_chain(surface, offset)
         super().render(surface, index, offset)
 
     def draw_chain(self, surface, offset):
         for c, dist in self.cons:
-            if dist == 0 or dist == 1000:
+            if dist == 0 or dist == 1000 or self.obj_id >= c.obj_id:
                 continue
 
             import math

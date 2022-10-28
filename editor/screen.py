@@ -9,7 +9,7 @@ from .bar import Bar
 from .event_handler import EventHandler
 from .renderable import Renderable
 from .scalable import Scalable
-from .tilemap import TileMap
+from .tilemap import TileMap, Conn
 from .tileset import TileSet
 
 
@@ -55,13 +55,13 @@ class Screen(Renderable, EventHandler, Scalable):
                 if event.button == 1:  # Left click
                     self.drag = 1
                     self.bar.clicked_at(self.mouse_pos)
-                    self.handle_set()
+                    self.handle_set(True)
                 elif event.button == 3:
                     self.drag = 3
                     self.handle_remove()
             elif event.type == pygame.MOUSEMOTION:
                 if self.drag == 1:
-                    self.handle_set()
+                    self.handle_set(False)
                 elif self.drag == 3:
                     self.handle_remove()
             elif event.type == pygame.MOUSEBUTTONUP:
@@ -80,7 +80,7 @@ class Screen(Renderable, EventHandler, Scalable):
             if self.loader is not None:
                 self.loader.resize_tileset(*self.screen_size)
 
-    def handle_set(self):
+    def handle_set(self, static: bool):
         pos = self.tile_mouse_pos
         if not (0 <= pos[0] < self.tilemap.shape[0]) or not (0 <= pos[1] < self.tilemap.shape[1]):
             return
@@ -103,7 +103,8 @@ class Screen(Renderable, EventHandler, Scalable):
         elif type == "slime":
             self.tilemap.set_slime(self.tile_mouse_pos,
                                    tile["id"] == 527, sound)
-
+        elif type == "chain" and static:
+            self.tilemap.connect(self.tile_mouse_pos, sound)
     def handle_remove(self):
         pos = self.tile_mouse_pos
         if not (0 <= pos[0] < self.tilemap.shape[0]) or not (0 <= pos[1] < self.tilemap.shape[1]):
@@ -127,7 +128,9 @@ class Screen(Renderable, EventHandler, Scalable):
         if 0 <= mx < self.tilemap.shape[0] and 0 <= my < self.tilemap.shape[1]:
             sel = self.bar.selected_tile()
             if sel is not None:
-                if self.tilemap.get(self.tile_mouse_pos) == -1:
+                if sel["type"] == "chain" and self.tilemap.connecting is not None:
+                    self.tilemap.draw_chain(Conn(self.tilemap.connecting, self.tile_mouse_pos, 1), surface, offset)
+                elif self.tilemap.get(self.tile_mouse_pos) == -1:
                     img = self.tileset.get_tile(
                         sel["id"]).copy()
                     img.set_alpha(100)
