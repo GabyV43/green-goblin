@@ -5,6 +5,7 @@ from objects.moveable import Moveable
 
 class Connected(Moveable):
     frozen: bool
+    just_molten: bool
     # The list of objects, we're connected to
     cons: list[tuple['Connected', int]]
     con_id: int
@@ -15,6 +16,7 @@ class Connected(Moveable):
         self.cons = [(self, 0)]
         self.frozen = False
         self.dead = False
+        self.just_molten = False
         self.con_id = uid
         self.obj_id = uid
 
@@ -58,7 +60,12 @@ class Connected(Moveable):
             ids = []
 
         if self.con_id in ids:
-            return Moveable.push(self, dx, dy, ids)
+            res = Moveable.push(self, dx, dy, ids)
+
+            if res:
+                self.just_molten = False
+
+            return res
         else:
             ids.append(self.con_id)
 
@@ -91,10 +98,13 @@ class Connected(Moveable):
             for c in pulls:
                 c.push(dx, dy, ids)
 
+        self.just_molten = False
+
         return True
 
     def freeze(self):
-        if not self.frozen:
+        if not self.frozen and not self.just_molten:
+            print("Freeze")
             for c, _ in self.cons:
                 c.frozen = True
             # freeze_sound = mixer.Sound("sounds_effects/freeze.mp3")
@@ -102,9 +112,12 @@ class Connected(Moveable):
             # freeze_sound.play()
 
     def unfreeze(self):
+        print("Unfreeze")
+        for c, _ in self.cons:
+            c.frozen = False
+            c.just_molten = True
         if self.frozen:
-            for c, _ in self.cons:
-                c.frozen = False
+            ...
             # unfreeze_sound = mixer.Sound("sounds_effects/unfreeze.mp3")
             # # unfreeze_sound.set_volume(0.3)
             # unfreeze_sound.play()
